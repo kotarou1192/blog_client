@@ -1,0 +1,11 @@
+# dependencies
+/node_modules
+
+# debug logs
+yarn-debug.log*
+yarn-error.log*
+
+# webpack outputs
+/public/*.js
+/public/*.json
+/public/*.txt
