@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import * as network from "../../utils/network";
 import { useHistory } from "react-router-dom";
+import { AccountCreateReadme } from "./AccountCreateReadme";
+import "./AccountCreationForm.css";
 
 type RequestParams = {
   value: {
@@ -95,38 +97,52 @@ export const AccountCreate: React.FC<{}> = () => {
   }
 
   return (
-    <div>
-      <div></div>
-      <div>
+    <div className="account_creation_base">
+      <AccountCreateReadme />
+      <div className="account_creation_form">
         <span hidden={submited}>
           <ErrorMessageList messages={errorMessages}></ErrorMessageList>
         </span>
-        <p>
+        <div>
+          <p className="account_creation_form__nickname_text">
+            使用できる文字は半角英数字とハイフンのみです。
+          </p>
           <input
+            className="account_creation_form__input_nickname"
             type="text"
-            placeholder="nickname"
+            placeholder="ニックネーム"
             onChange={(el) => setName(el.target.value)}
             value={name}
           ></input>
-        </p>
-        <p>
+        </div>
+        <div>
+          <p className="account_creation_form__password_text">
+            パスワードを決めてください。コピーやペーストはできません。
+          </p>
           <input
+            className="account_creation_form__input_password"
             type="password"
             placeholder="password"
             onChange={(el) => setPassword(el.target.value)}
             value={password}
           ></input>
-        </p>
-        <p>
+        </div>
+        <div>
+          <p className="account_creation_form__confirm_password_text">
+            確認のためもう一度パスワードを入力してください。
+          </p>
           <input
+            className="account_creation_form__input_password_confirm"
             type="password"
-            placeholder="passowrd確認"
+            placeholder="確認"
             onChange={(el) => setPasswordConfirm(el.target.value)}
             value={passwordConfirm}
           ></input>
-        </p>
+        </div>
         <input
+          className="account_creation_form__submit"
           type="submit"
+          value="同意して送信"
           disabled={submited}
           onClick={() => {
             setSubmited(true);
@@ -140,9 +156,15 @@ export const AccountCreate: React.FC<{}> = () => {
 
 const ErrorMessageList: React.FC<{ messages: string[] }> = (props) => {
   return (
-    <ul>
+    <ul
+      className={
+        props.messages.length === 0 ? "hidden" : "account_creation__error_base"
+      }
+    >
       {props.messages.map((message, index) => (
-        <li key={index}>{message}</li>
+        <li key={index} className="account_creation__error_text">
+          {message}
+        </li>
       ))}
     </ul>
   );
