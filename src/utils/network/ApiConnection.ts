@@ -3,7 +3,7 @@ import { BaseURL, ApiUrlRegExp } from "./Constants";
 
 export const postTo = async (
   api: string,
-  params: {}
+  params: { [s: string]: any }
 ): Promise<AxiosResponse<any>> => {
   if (!ApiUrlRegExp.test(api))
     throw TypeError(
