@@ -1,14 +1,13 @@
 import React from "react";
-import { Link, Route, Switch, useLocation } from "react-router-dom";
+import { AccountCreate } from "./Account/AccountCreate";
+import { Link, Route, Switch } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
+import * as network from "../utils/network";
 
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 const sitekey = "6LfbaiscAAAAAE1AUTOJKd7GY-aoVrfTc7E8AIEC";
 export const Home: React.FC<{}> = () => {
-  const query = useQuery();
+  const query = network.useQuery();
   return (
     <Switch>
       <Route exact path="/">
@@ -20,6 +19,9 @@ export const Home: React.FC<{}> = () => {
             creationFailed={query.get("failed") === "true"}
           ></AccountCreationManager>
         </GoogleReCaptchaProvider>
+      </Route>
+      <Route path="/account/create">
+        <AccountCreate></AccountCreate>
       </Route>
     </Switch>
   );
