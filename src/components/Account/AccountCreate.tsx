@@ -30,7 +30,6 @@ export const AccountCreate: React.FC<{}> = () => {
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
-  console.log(password, passwordConfirm, name, sessionID);
 
   const handleSubmit = () => {
     const errorMessageArray: string[] = [];
