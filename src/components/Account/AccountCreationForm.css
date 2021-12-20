@@ -1,0 +1,87 @@
+.account_creation_base {
+  padding-top: 10px;
+  padding-bottom: 30px;
+  margin: 0 auto;
+  background-color: rgba(236, 255, 214, 0.212);
+}
+
+.account_creation_form {
+  background-color: white;
+  margin: 0 auto;
+  text-align: center;
+  margin-top: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border: 1px solid rgb(161, 161, 161);
+  width: 400px;
+  border-radius: 8px;
+}
+
+.account_creation_form__input_nickname {
+  width: 30%;
+}
+
+.account_creation_form__input_password {
+  width: 30%;
+}
+
+.account_creation_form__input_password_confirm {
+  width: 30%;
+}
+
+.account_creation_form__submit {
+  background-color: rgb(70, 118, 250);
+  color: white;
+  width: 100px;
+  border: 0;
+  margin-top: 20px;
+  border-radius: 5px;
+}
+
+.account_creation_form__nickname_text {
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+  font-size: 70%;
+  color: rgb(112, 112, 112);
+}
+
+.account_creation_form__password_text {
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+  font-size: 70%;
+  color: rgb(112, 112, 112);
+}
+
+.account_creation_form__confirm_password_text {
+  margin: 0;
+  padding: 0;
+  margin-top: 20px;
+  font-size: 70%;
+  color: rgb(112, 112, 112);
+}
+
+.account_creation__error_base {
+  border: 5px solid rgb(150, 150, 150);
+  border-radius: 30px;
+  margin: 10px;
+  background-color: black;
+  background: linear-gradient(to top, black ,rgb(0, 51, 0), black);
+}
+ul.account_creation__error_base {
+  list-style-type: none;
+  margin-left: 10px;
+}
+
+.account_creation__error_text {
+  text-align: left;
+  font-size: 90%;
+  color:rgb(0, 202, 27);
+  margin-bottom:10px;
+}
+
+ul.account_creation__error_base  li:before {
+  content: '>: ';
+  margin-left: -16px;
+}
