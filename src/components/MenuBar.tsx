@@ -22,12 +22,13 @@ export const MenuBar: React.FC<MenuBarProps> = (props) => {
         {props.token === "" ? "Login" : "MyPage"}
       </Link>
       <Link
-        className={
-          props.token === "" ? "MenuBar__signUp" : "MenuBar__signUp__hidden"
-        }
-        to={"/account/want_to_create"}
+        className={props.token === "" ? "MenuBar__signUp" : "MenuBar__logout"}
+        to={props.token === "" ? "/account/want_to_create" : "/"}
+        onClick={() => {
+          if (props.token !== "") props.setToken("");
+        }}
       >
-        signUp
+        {props.token === "" ? "signUp" : "logout"}
       </Link>
     </div>
   );

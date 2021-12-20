@@ -50,7 +50,6 @@ const LoginInputContainer: React.FC<LoginInputContainerProps & LoginProps> = (
   const [password, setPassword] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
   const history = useHistory();
-  console.log(useQuery());
   const loginFailed = useQuery().get("failed");
 
   return (

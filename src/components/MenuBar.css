@@ -52,6 +52,10 @@
   border: none;
 }
 
-.MenuBar__signUp__hidden {
-  display: none;
+.MenuBar__logout {
+  margin: auto;
+  text-decoration: none;
+  height: 25px;
+  border-radius: 5px;
+  border: none;
 }
