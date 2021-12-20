@@ -1,5 +1,5 @@
 {
-  "name": "weekly_schedule_planner",
+  "name": "blog",
   "version": "0.1.0",
   "main": "./public/bundle.js",
   "private": true,
