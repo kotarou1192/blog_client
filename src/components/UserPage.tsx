@@ -25,9 +25,11 @@ export const UserPage: React.FC<UserProps> = (props) => {
   }, []);
   return (
     <div>
-      {Object.entries(userData).map((val, id) => (
-        <p key={id}>{val[0] + ": " + val[1]}</p>
-      ))}
+      {userData.name === ""
+        ? "loading"
+        : Object.entries(userData).map((val, id) => (
+            <p key={id}>{val[0] + ": " + val[1]}</p>
+          ))}
     </div>
   );
 };
