@@ -14,7 +14,7 @@ type UserParams = {
 export const UserPage: React.FC<UserProps> = (props) => {
   const [userData, setUserData] = useState<UserParams>({ name: "" });
   const name = props.match.params.name;
-  console.log("1");
+  console.log("loading");
   useMemo(async () => {
     setUserData(
       await axios
@@ -22,7 +22,7 @@ export const UserPage: React.FC<UserProps> = (props) => {
         .then((res) => res.data)
         .catch((e) => {
           console.log(e);
-          return "";
+          return { name: "" };
         })
     );
   }, []);
