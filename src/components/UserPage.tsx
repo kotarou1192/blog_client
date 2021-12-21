@@ -20,7 +20,10 @@ export const UserPage: React.FC<UserProps> = (props) => {
       await axios
         .get("https://api.takashiii-hq.com/users/" + name)
         .then((res) => res.data)
-        .catch((e) => console.log(e))
+        .catch((e) => {
+          console.log(e);
+          return "";
+        })
     );
   }, []);
   return (
