@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
 import axios from "axios";
-import { useMemo } from "react-router/node_modules/@types/react";
 
 type UserProps = {
   match: {
@@ -13,12 +12,22 @@ type UserParams = {
 };
 
 export const UserPage: React.FC<UserProps> = (props) => {
+  const [userData, setUserData] = useState<UserParams>({ name: "" });
   const name = props.match.params.name;
-  const userData = useMemo(async () => {
-    await axios
-      .get("https://api.takashiii-hq.com/users/" + name)
-      .then((res) => res.data)
-      .catch((e) => console.log(e));
+  console.log("1");
+  useMemo(async () => {
+    setUserData(
+      await axios
+        .get("https://api.takashiii-hq.com/users/" + name)
+        .then((res) => res.data)
+        .catch((e) => console.log(e))
+    );
   }, []);
-  return <div>{userData}</div>;
+  return (
+    <div>
+      {Object.entries(userData).map((val, id) => (
+        <p key={id}>{val[0] + ": " + val[1]}</p>
+      ))}
+    </div>
+  );
 };
