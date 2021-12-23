@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AccountCreate } from "./Account/AccountCreate";
 import { Route, Switch } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
@@ -10,12 +10,15 @@ import { Login } from "./LoginContainer/Login";
 import { sitekey } from "../utils/Constants";
 import { UserPage } from "./UserPage";
 import { MyPage } from "./MyPage";
+import { SearchResults } from "./SearchResults";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
+  const [keywords, setKeywords] = useState<string>("");
+  const [results, setResults] = useState([]);
   return (
     <div>
-      <MenuBar />
+      <MenuBar keywords={keywords} setKeywords={setKeywords} />
       <Switch>
         <Route exact path="/">
           <Top />
@@ -26,6 +29,13 @@ export const Router: React.FC<{}> = () => {
         <Route path="/users/:name" component={UserPage}></Route>
         <Route path="/me">
           <MyPage />
+        </Route>
+        <Route path="/search/users">
+          <SearchResults
+            results={results}
+            setResults={setResults}
+            setKeywords={setKeywords}
+          />
         </Route>
         <Route path="/account/want_to_create">
           <GoogleReCaptchaProvider reCaptchaKey={sitekey} language="ja">

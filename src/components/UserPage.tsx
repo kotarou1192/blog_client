@@ -14,7 +14,6 @@ type UserParams = {
 export const UserPage: React.FC<UserProps> = (props) => {
   const [userData, setUserData] = useState<UserParams>({ name: "" });
   const name = props.match.params.name;
-  console.log("loading");
   useMemo(async () => {
     setUserData(
       await getWithAuthenticate("/users/" + name)
