@@ -12,6 +12,30 @@
   border: none;
 }
 
+.MenuBar__search_button {
+  height: 25px;
+  width: 60px;
+  margin: auto 0;
+  margin-left: 10px;
+  color: white;
+  background-color: rgb(63, 40, 189);
+  border-radius: 5px;
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
+.MenuBar__search_button:hover {
+  height: 25px;
+  width: 60px;
+  margin: auto 0;
+  margin-left: 10px;
+  color: white;
+  background-color: rgb(130, 110, 220);
+  border-radius: 5px;
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
 .MenuBar__titleText {
   margin: auto auto;
   padding: 10px;
@@ -42,6 +66,30 @@
   background-color: rgb(63, 40, 189);
   text-decoration: none;
   color: white;
+  border-radius: 5px;
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
+.MenuBar__loginButton:hover {
+  margin: auto;
+  padding: 5px 5px;
+  height: 25px;
+  text-decoration: none;
+  color: white;
+  background-color: rgb(130, 110, 220);
+  border-radius: 5px;
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
+.MenuBar__myPageButton:hover {
+  margin: auto;
+  padding: 5px 5px;
+  height: 25px;
+  text-decoration: none;
+  color: white;
+  background-color: rgb(130, 110, 220);
   border-radius: 5px;
   border-color: rgb(212, 212, 212);
   border-style: solid;

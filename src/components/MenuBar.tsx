@@ -1,17 +1,51 @@
 import React from "react";
 import "./MenuBar.css";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { LoggedIn, logout } from "../utils/CookiesWrapper";
 
-export const MenuBar: React.FC<{}> = () => {
+type MenuBarProps = {
+  keywords: string;
+  setKeywords: any;
+};
+
+export const MenuBar: React.FC<MenuBarProps> = (props) => {
   const loggedIn = LoggedIn();
+  const history = useHistory();
+
+  const keywordSpliter = () => {
+    const keys = new Map<string, boolean>();
+    return props.keywords
+      .split(/\s/)
+      .map((key) => {
+        if (keys.get(key) == null) {
+          keys.set(key, true);
+          return key;
+        }
+      })
+      .filter(Boolean);
+  };
+
   return (
     <div className="MenuBar">
       <Link className="MenuBar__titleText" to="/">
         Technology-Comunity
       </Link>
-      <input type="text" className="MenuBar__input"></input>
-      <div></div>
+
+      <input
+        type="text"
+        className="MenuBar__input"
+        value={props.keywords}
+        onChange={(e) => props.setKeywords(e.target.value)}
+      ></input>
+      <input
+        type="submit"
+        value="Search"
+        className="MenuBar__search_button"
+        onClick={() => {
+          const keywords = keywordSpliter().join(" ");
+          history.push("/search/users?keywords=" + keywords);
+        }}
+      ></input>
       <Link
         className={loggedIn ? "MenuBar__myPageButton" : "MenuBar__loginButton"}
         to={loggedIn ? "/me" : "/login"}
