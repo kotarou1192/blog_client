@@ -7,7 +7,9 @@ export const MenuBar: React.FC<{}> = () => {
   const loggedIn = LoggedIn();
   return (
     <div className="MenuBar">
-      <div className="MenuBar__titleText">Technology-Comunity</div>
+      <Link className="MenuBar__titleText" to="/">
+        Technology-Comunity
+      </Link>
       <input type="text" className="MenuBar__input"></input>
       <div></div>
       <Link
