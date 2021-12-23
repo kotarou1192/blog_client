@@ -1,34 +1,29 @@
 import React from "react";
 import "./MenuBar.css";
 import { Link } from "react-router-dom";
+import { LoggedIn, logout } from "../utils/CookiesWrapper";
 
-type MenuBarProps = {
-  token: string;
-  setToken: any;
-};
-
-export const MenuBar: React.FC<MenuBarProps> = (props) => {
+export const MenuBar: React.FC<{}> = () => {
+  const loggedIn = LoggedIn();
   return (
     <div className="MenuBar">
       <div className="MenuBar__titleText">Technology-Comunity</div>
       <input type="text" className="MenuBar__input"></input>
       <div></div>
       <Link
-        className={
-          props.token === "" ? "MenuBar__loginButton" : "MenuBar__myPageButton"
-        }
-        to={props.token === "" ? "/login" : "/users/me"}
+        className={loggedIn ? "MenuBar__myPageButton" : "MenuBar__loginButton"}
+        to={loggedIn ? "/me" : "/login"}
       >
-        {props.token === "" ? "Login" : "MyPage"}
+        {loggedIn ? "MyPage" : "Login"}
       </Link>
       <Link
-        className={props.token === "" ? "MenuBar__signUp" : "MenuBar__logout"}
-        to={props.token === "" ? "/account/want_to_create" : "/"}
+        className={loggedIn ? "MenuBar__logout" : "MenuBar__signUp"}
+        to={loggedIn ? "/" : "/account/want_to_create"}
         onClick={() => {
-          if (props.token !== "") props.setToken("");
+          if (loggedIn) logout();
         }}
       >
-        {props.token === "" ? "signUp" : "logout"}
+        {loggedIn ? "logout" : "signUp"}
       </Link>
     </div>
   );
