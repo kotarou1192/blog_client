@@ -18,6 +18,22 @@
   background-color: rgb(235, 235, 235);
 }
 
+.login_checkbox {
+  margin: auto;
+  text-align: center;
+  position: relative;
+  left: 80px;
+}
+
+.login_checkbox__text {
+  font-size: xx-small;
+  color: gray;
+}
+
+.login_checkbox__checkbox {
+  margin: auto;
+}
+
 .login__mail_input {
   height: 25px;
   margin: auto;
@@ -37,5 +53,7 @@
   border: none;
   color: white;
   border-radius: 5px;
-  background-color: rgb(63, 40, 189)
+  background-color: rgb(63, 40, 189);
+  position: relative;
+  left: 30px;
 }

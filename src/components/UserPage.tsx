@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import axios from "axios";
+import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
 
 type UserProps = {
   match: {
@@ -17,8 +17,7 @@ export const UserPage: React.FC<UserProps> = (props) => {
   console.log("loading");
   useMemo(async () => {
     setUserData(
-      await axios
-        .get("https://api.takashiii-hq.com/users/" + name)
+      await getWithAuthenticate("/users/" + name)
         .then((res) => res.data)
         .catch((e) => {
           console.log(e);
