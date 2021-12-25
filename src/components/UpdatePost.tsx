@@ -37,16 +37,14 @@ export const CreatePost: React.FC<UpdatePostProps> = (props) => {
   }, []);
 
   const handlePostToAPI = async () => {
-    return await postWithAuthenticate("/users/" + name + "/posts", post)
-      .then((res) => {
+    await postWithAuthenticate("/users/" + name + "/posts", post)
+      .then(() => {
         console.log("success");
         //TODO: responseでidを返す。
         history.push("/users/" + name + "/posts/" + id);
-        return res;
       })
       .catch((err) => {
         console.log(err);
-        throw err;
       });
   };
 
