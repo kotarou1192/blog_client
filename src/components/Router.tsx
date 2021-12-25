@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccountCreate } from "./Account/AccountCreate";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import * as network from "../utils/network";
@@ -11,6 +11,8 @@ import { sitekey } from "../utils/Constants";
 import { UserPage } from "./UserPage";
 import { MyPage } from "./MyPage";
 import { SearchResults } from "./SearchResults";
+import { PostItem } from "./PostItem";
+import { CreatePost } from "./CreatePost";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
@@ -21,15 +23,23 @@ export const Router: React.FC<{}> = () => {
       <MenuBar keywords={keywords} setKeywords={setKeywords} />
       <Switch>
         <Route exact path="/">
+          <Link to="/users/takashiii/posts/new">here</Link>
+          <Link to="/users/takashiii"> [me]</Link>
           <Top />
         </Route>
         <Route path="/login">
           <Login />
         </Route>
-        <Route path="/users/:name" component={UserPage}></Route>
+        <Route exact path="/users/:name" component={UserPage}></Route>
         <Route path="/me">
           <MyPage />
         </Route>
+        <Route
+          exact
+          path="/users/:name/posts/new"
+          component={CreatePost}
+        ></Route>
+        <Route path="/users/:name/posts/:id" component={PostItem}></Route>
         <Route path="/search/users">
           <SearchResults
             results={results}

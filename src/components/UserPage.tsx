@@ -1,5 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
+import { Posts } from "./Posts";
+import { User } from "./User";
+import "./UserPage.css";
 
 type UserProps = {
   match: {
@@ -9,10 +12,14 @@ type UserProps = {
 
 type UserParams = {
   name: string;
+  is_my_page: boolean;
 };
 
 export const UserPage: React.FC<UserProps> = (props) => {
-  const [userData, setUserData] = useState<UserParams>({ name: "" });
+  const [userData, setUserData] = useState<UserParams>({
+    name: "",
+    is_my_page: false
+  });
   const name = props.match.params.name;
   useMemo(async () => {
     setUserData(
@@ -24,13 +31,11 @@ export const UserPage: React.FC<UserProps> = (props) => {
         })
     );
   }, []);
+  if (userData.name === "") return <div>loading</div>;
   return (
-    <div>
-      {userData.name === ""
-        ? "loading"
-        : Object.entries(userData).map((val, id) => (
-            <p key={id}>{val[0] + ": " + val[1]}</p>
-          ))}
+    <div className="user_page">
+      <User data={userData} />
+      <Posts data={userData} />
     </div>
   );
 };
