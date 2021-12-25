@@ -9,7 +9,7 @@ import {
   ReactMarkdownNames
 } from "react-markdown/lib/ast-to-react";
 import { Link, useHistory } from "react-router-dom";
-import { getUserName, logout } from "../utils/CookiesWrapper";
+import { getUserName } from "../utils/CookiesWrapper";
 import { AxiosResponse } from "axios";
 
 type PostEdirotProps = {
@@ -39,7 +39,7 @@ export const PostEditor: React.FC<PostEdirotProps> = (props) => {
       })
       .catch(() => {
         console.error("error");
-        logout();
+        props.setDisabled(false);
       });
   };
 
