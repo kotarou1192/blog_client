@@ -13,6 +13,7 @@ import { MyPage } from "./MyPage";
 import { SearchResults } from "./SearchResults";
 import { PostItem } from "./PostItem";
 import { CreatePost } from "./CreatePost";
+import { UpdatePost } from "./UpdatePost";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
@@ -23,7 +24,7 @@ export const Router: React.FC<{}> = () => {
       <MenuBar keywords={keywords} setKeywords={setKeywords} />
       <Switch>
         <Route exact path="/">
-          <Link to="/users/takashiii/posts/new">here</Link>
+          <Link to="/users/takashiii/posts/11">here</Link>
           <Link to="/users/takashiii"> [me]</Link>
           <Top />
         </Route>
@@ -38,6 +39,11 @@ export const Router: React.FC<{}> = () => {
           exact
           path="/users/:name/posts/new"
           component={CreatePost}
+        ></Route>
+        <Route
+          exact
+          path="/users/:name/posts/:id/edit"
+          component={UpdatePost}
         ></Route>
         <Route path="/users/:name/posts/:id" component={PostItem}></Route>
         <Route path="/search/users">
