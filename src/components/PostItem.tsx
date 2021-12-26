@@ -69,7 +69,7 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
               <input
                 type="submit"
                 className="post_edit__submit_button"
-                hidden={name === myName}
+                hidden={name !== myName}
                 value="編集"
                 onClick={() =>
                   history.push("/users/" + name + "/posts/" + id + "/edit")
@@ -127,7 +127,7 @@ const DeleteButton: React.FC<ButtonProps> = ({
     <input
       type="submit"
       className="post_delete__submit_button"
-      hidden={name === myName}
+      hidden={name !== myName}
       value="削除"
       onClick={() => {
         if (submitDelete) {
