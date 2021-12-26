@@ -45,7 +45,11 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   }, []);
   return (
     <div className="contents">
-      <div className="contents__info">something</div>
+      <div className="contents__info">
+        <a href="https://commonmark.org/help/" target="_blank" rel="noreferrer">
+          このブログで使えるmarkdownの記法
+        </a>
+      </div>
       {props.data.is_my_page ? (
         <input
           type="submit"
