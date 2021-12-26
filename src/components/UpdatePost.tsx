@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import {
   getWithAuthenticate,
-  postWithAuthenticate
+  putWithAuthenticate
 } from "../utils/network/AxiosWrapper";
 import { PostEditor } from "./PostEditor";
 
@@ -37,7 +37,7 @@ export const UpdatePost: React.FC<UpdatePostProps> = (props) => {
   }, []);
 
   const handlePostToAPI = async () => {
-    await postWithAuthenticate("/users/" + name + "/posts", post)
+    await putWithAuthenticate("/users/" + name + "/posts/" + id, post)
       .then(() => {
         console.log("success");
         //TODO: responseでidを返す。
