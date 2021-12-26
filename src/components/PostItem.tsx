@@ -40,7 +40,9 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
   const id = props.match.params.id;
   const myName = getUserName();
   const dateToString = (date: Date): string => {
-    return `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
+    return `${date.getFullYear()}年${
+      date.getMonth() + 1
+    }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
 
   useMemo(async () => {

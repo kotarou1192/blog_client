@@ -13,7 +13,9 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   const history = useHistory();
   const name = props.data.name;
   const dateToString = (date: Date) => {
-    return `${date.getFullYear()}年${date.getMonth()}月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
+    return `${date.getFullYear()}年${
+      date.getMonth() + 1
+    }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
   useMemo(async () => {
     setLinks(
