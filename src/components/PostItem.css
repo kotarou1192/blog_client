@@ -24,6 +24,11 @@
   padding: 0;
 }
 
+.head__oneline {
+  display: grid;
+  grid-template-columns: 9fr 1fr;
+}
+
 .head__user_name {
   text-decoration: none;
   color: rgb(33, 0, 182);
@@ -53,3 +58,36 @@
 .post_item__body {
   margin-top: 10px;
 }
+
+.post_edit__button_area {
+  width: 200px;
+}
+
+.post_edit__submit_button {
+  width: 80px;
+  height: 26px;
+  color: white;
+  background-color: rgba(143, 143, 143, 0.5);
+  border-radius: 5px;
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
+.post_edit__submit_button:hover {
+  background-color: rgb(143, 143, 143);
+}
+
+.post_delete__submit_button {
+  margin-left: 50px;
+  width: 60px;
+  height: 26px;
+  color: white;
+  background-color: rgba(170, 0, 0, 0.2);
+  border-color: rgb(212, 212, 212);
+  border-style: solid;
+}
+
+.post_delete__submit_button:hover {
+  background-color: rgb(255, 0, 0);
+}
+

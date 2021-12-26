@@ -15,7 +15,7 @@ type UpdatePostProps = {
   };
 };
 
-export const CreatePost: React.FC<UpdatePostProps> = (props) => {
+export const UpdatePost: React.FC<UpdatePostProps> = (props) => {
   const [post, setPost] = useState<{ title: string; body: string }>({
     title: "",
     body: ""
