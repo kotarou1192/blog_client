@@ -1,6 +1,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
-import { BaseURL } from "./Constants";
+import { BaseURL, LeftDaysToDeleteToken } from "./Constants";
 
 type LoginParams = {
   email: string;
@@ -42,7 +42,7 @@ export const rememberLogin = async (
   };
   return await axios.post(BaseURL + "/auth", loginApiParams).then((res) => {
     if (res.status === 200) {
-      Cookies.set("loginToken", res.data.token);
+      Cookies.set("loginToken", res.data.token, {expires: LeftDaysToDeleteToken});
       console.log("success to remember");
     }
     return res;
