@@ -47,6 +47,7 @@ export const Router: React.FC<{}> = () => {
         <Route path="/search/users">
           <SearchResults
             results={results}
+            keywords={keywords}
             setResults={setResults}
             setKeywords={setKeywords}
           />

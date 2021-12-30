@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 
 type SearchResultsProps = {
   results: any[];
+  keywords: string;
   setResults: any;
   setKeywords: any;
 };
@@ -18,7 +19,7 @@ export const SearchResults: React.FC<SearchResultsProps> = (props) => {
     });
   };
   useEffect(searchUsers, [props.results]);
-  useEffect(() => props.setKeywords(querry.get("keywords")), []);
+  useEffect(() => props.setKeywords(querry.get("keywords")), [props.keywords]);
   return (
     <ul>
       {props.results.map((result, index) => (
