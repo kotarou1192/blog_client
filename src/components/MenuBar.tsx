@@ -12,9 +12,9 @@ export const MenuBar: React.FC<MenuBarProps> = (props) => {
   const loggedIn = LoggedIn();
   const history = useHistory();
 
-  const keywordSpliter = () => {
+  const keywordSpliter = (keywords: string | undefined) => {
     const keys = new Map<string, boolean>();
-    return props.keywords
+    return (keywords || props.keywords)
       .split(/\s/)
       .map((key) => {
         if (keys.get(key) == null) {
@@ -35,14 +35,16 @@ export const MenuBar: React.FC<MenuBarProps> = (props) => {
         type="text"
         className="MenuBar__input"
         value={props.keywords}
-        onChange={(e) => props.setKeywords(e.target.value)}
+        onChange={(e) => {
+          props.setKeywords(e.target.value);
+        }}
       ></input>
       <input
         type="submit"
         value="Search"
         className="MenuBar__search_button"
         onClick={() => {
-          const keywords = keywordSpliter().join(" ");
+          const keywords = keywordSpliter(props.keywords).join(" ");
           history.push("/search/users?keywords=" + keywords);
         }}
       ></input>

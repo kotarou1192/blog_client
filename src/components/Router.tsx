@@ -17,8 +17,9 @@ import { UpdatePost } from "./UpdatePost";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
-  const [keywords, setKeywords] = useState<string>("");
+  const [keywords, setKeywords] = useState<string>(query.get("keywords") || "");
   const [results, setResults] = useState([]);
+
   return (
     <div>
       <MenuBar keywords={keywords} setKeywords={setKeywords} />

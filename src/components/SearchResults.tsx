@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React, { useMemo } from "react";
 import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
-import { useQuery } from "../utils/network/QueryStringGetter";
 import { Link } from "react-router-dom";
 
 type SearchResultsProps = {
@@ -10,16 +9,29 @@ type SearchResultsProps = {
   setKeywords: any;
 };
 export const SearchResults: React.FC<SearchResultsProps> = (props) => {
-  const querry = useQuery();
-  const searchUsers = () => {
-    getWithAuthenticate("/search/users", {
-      keywords: querry.get("keywords")
-    }).then((res) => {
-      props.setResults(res.data);
-    });
+  const searchUsers = async () => {
+    await getWithAuthenticate("/search/users", {
+      keywords: props.keywords
+    })
+      .then((res) => {
+        props.setResults(res.data);
+      })
+      .catch((e) => console.log(e));
   };
-  useEffect(searchUsers, [props.results]);
-  // useEffect(() => props.setKeywords(querry.get("keywords")), [props.keywords]);
+  const keywordSpliter = () => {
+    const keys = new Map<string, boolean>();
+    return props.keywords
+      .split(/\s/)
+      .map((key) => {
+        if (keys.get(key) == null) {
+          keys.set(key, true);
+          return key;
+        }
+      })
+      .filter(Boolean);
+  };
+
+  useMemo(searchUsers, [keywordSpliter().join("")]);
   return (
     <ul>
       {props.results.map((result, index) => (
