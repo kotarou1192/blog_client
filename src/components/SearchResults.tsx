@@ -19,7 +19,7 @@ export const SearchResults: React.FC<SearchResultsProps> = (props) => {
     });
   };
   useEffect(searchUsers, [props.results]);
-  useEffect(() => props.setKeywords(querry.get("keywords")), [props.keywords]);
+  // useEffect(() => props.setKeywords(querry.get("keywords")), [props.keywords]);
   return (
     <ul>
       {props.results.map((result, index) => (
