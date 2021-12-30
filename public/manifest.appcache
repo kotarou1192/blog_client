@@ -1,0 +1,16 @@
+CACHE MANIFEST
+# 64c29f440adf72e6b350
+
+main.bundle.js
+vendor.bundle.js
+vendor.bundle.js.LICENSE.txt
+index.html
+
+CACHE:
+vendor.bundle.js
+
+NETWORK:
+main.bundle.js
+
+FALLBACK:
+

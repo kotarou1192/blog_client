@@ -1,9 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
 import "./PostEditor.css";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import ReactMarkdown from "react-markdown";
 import {
   CodeComponent,
   ReactMarkdownNames
@@ -11,6 +8,9 @@ import {
 import { Link, useHistory } from "react-router-dom";
 import { getUserName } from "../utils/CookiesWrapper";
 import { AxiosResponse } from "axios";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import ReactMarkdown from "react-markdown";
+import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 type PostEdirotProps = {
   post: {
