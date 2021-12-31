@@ -1,11 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Input } from "../dot_style_generic_conponents/doms";
 
 export const Top: React.FC<{}> = () => {
+  /* TODO: dialogを作る
+   * https://nostalgic-css.github.io/NES.css/#
+   */
   return (
     <div>
       <div>
         <h2>このサイトについて</h2>
+        {<Input.Text domState="success"></Input.Text>}
         <p>
           ブログを書きたいなと思ったので制作しているブログ投稿アプリです。
           <br></br>
