@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccountCreate } from "./Account/AccountCreate";
-import { Route, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import * as network from "../utils/network";
@@ -14,6 +14,7 @@ import { SearchResults } from "./SearchResults";
 import { PostItem } from "./PostItem";
 import { CreatePost } from "./CreatePost";
 import { UpdatePost } from "./UpdatePost";
+import { NotFound } from "./NotFound";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
@@ -25,6 +26,7 @@ export const Router: React.FC<{}> = () => {
       <MenuBar keywords={keywords} setKeywords={setKeywords} />
       <Switch>
         <Route exact path="/">
+          <Link to="/users/takashii"> me</Link>
           <Top />
         </Route>
         <Route path="/login">
@@ -62,6 +64,9 @@ export const Router: React.FC<{}> = () => {
         </Route>
         <Route path="/account/create">
           <AccountCreate></AccountCreate>
+        </Route>
+        <Route>
+          <NotFound></NotFound>
         </Route>
       </Switch>
     </div>
