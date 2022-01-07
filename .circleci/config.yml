@@ -70,3 +70,4 @@ jobs:
         - run:
             name: Send Via SCP
             command: scp -r public/* ${username}@${hostname}:/var/www/html/takashiii-hq-front/
+            no_output_timeout: 30m
