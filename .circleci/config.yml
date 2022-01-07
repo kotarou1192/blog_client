@@ -32,6 +32,9 @@ jobs:
       - image: cimg/node:15.1
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
+
+    environment:
+      - NODE_DNV: production
     
     steps:
       - checkout
@@ -40,7 +43,7 @@ jobs:
             - yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: install dependencies
-          command: yarn install --production
+          command: yarn install
       - save_cache:
           key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
