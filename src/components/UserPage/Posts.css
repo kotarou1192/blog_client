@@ -1,7 +1,7 @@
 .contents {
   display: grid;
   flex-flow: column;
-  grid-template-rows: 3fr 50px 1fr 8fr;
+  grid-template-rows: 3fr 80px 9fr;
   margin: 10px;
   margin-left: 20px;
   margin-right: 30%;
@@ -17,17 +17,10 @@
 
 .contents__post_button {
   width: 100px;
-  height: 26px;
-  margin: auto;
-  color: white;
-  background-color: rgb(143, 143, 143);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
 }
 
-.contents__post_button:hover {
-  background-color: rgb(199, 199, 199);
+.contents__post_button_area {
+  margin: auto;
 }
 
 .contents__posts_list {

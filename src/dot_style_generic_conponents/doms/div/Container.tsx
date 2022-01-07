@@ -19,6 +19,7 @@ export const Container: React.FC<ComponentBaseType & ContainerProps> = ({
   titlePosition,
   children,
   isRounded,
+  className,
   ...props
 }) => {
   const modeClassName = mode === "dark" ? " is-dark" : "";
@@ -28,7 +29,8 @@ export const Container: React.FC<ComponentBaseType & ContainerProps> = ({
   return (
     <div
       className={
-        "nes-container" +
+        className +
+        " nes-container" +
         modeClassName +
         titlePositionClassName +
         roundClassName +

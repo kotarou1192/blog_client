@@ -11,6 +11,7 @@ import { AxiosResponse } from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { Button, Container } from "../dot_style_generic_conponents/doms";
 
 type PostEdirotProps = {
   post: {
@@ -48,20 +49,22 @@ export const PostEditor: React.FC<PostEdirotProps> = (props) => {
       <div></div>
       <div className="editor">
         <div className="editor__button_area">
-          <input
-            type="submit"
-            disabled={props.buttonDisabled}
+          <Button
+            domState="primary"
             className="editor__preview_button"
-            onClick={() => setPreview(!isPreview)}
-            value={isPreview ? "編集に戻る" : "プレビューを見る"}
-          ></input>
-          <input
-            type="submit"
             disabled={props.buttonDisabled}
-            className="editor__submit_button"
-            value="投稿"
-            onClick={buttonDisableWhenRequest}
-          ></input>
+            onClick={() => setPreview(!isPreview)}
+            value={isPreview ? "編集に戻る" : "プレビュー"}
+          ></Button>
+          <span className="button_margin">
+            <Button
+              disabled={props.buttonDisabled}
+              domState="success"
+              className="editor__submit_button"
+              value="投稿"
+              onClick={buttonDisableWhenRequest}
+            ></Button>
+          </span>
         </div>
         {isPreview ? (
           <Preview title={props.post.title} body={props.post.body} />
@@ -125,14 +128,14 @@ const Editor: React.FC<{
     <div className="editor">
       <input
         type="text"
-        className="editor__title_input"
+        className="nes-container editor__title_input"
         placeholder="NoTitle"
         value={props.post.title}
-        onChange={(el) =>
+        onChange={(el: any) =>
           props.setPost({ body: props.post.body, title: el.target.value })
         }
       ></input>
-      <div className="editor__body_input">
+      <Container title="body" className="editor__body_input">
         <textarea
           className="editor__body_textarea"
           value={props.post.body}
@@ -140,7 +143,7 @@ const Editor: React.FC<{
             props.setPost({ title: props.post.title, body: el.target.value })
           }
         ></textarea>
-      </div>
+      </Container>
     </div>
   );
 };

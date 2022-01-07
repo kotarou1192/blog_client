@@ -1,11 +1,13 @@
 .user {
-  display: grid;
-  grid-template-rows: 2fr 1fr 5fr;
-  background-color: rgb(255, 255, 255);
+  height: 480px;
+  width: 380px;
+}
+
+.user_info {
   margin: 10px;
   margin-left: 30%;
   margin-top: 20px;
-  height: 480px;
+  overflow: hidden;
 }
 
 .user__image {
@@ -29,4 +31,8 @@
   border-top: grey solid 1px;
   margin: 0 30px;
   padding-top: 10px;
+}
+
+.space {
+  height: 20px;
 }

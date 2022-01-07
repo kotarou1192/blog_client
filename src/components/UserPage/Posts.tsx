@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
+import { Container, Button } from "../../dot_style_generic_conponents/doms";
+import { getWithAuthenticate } from "../../utils/network/AxiosWrapper";
 import "./Posts.css";
 
 type PostsProps = {
@@ -46,24 +47,33 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   return (
     <div className="contents">
       <div className="contents__info">
-        <a href="https://commonmark.org/help/" target="_blank" rel="noreferrer">
-          このブログで使えるmarkdownの記法
-        </a>
+        <Container>
+          <a
+            href="https://commonmark.org/help/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            このブログで使えるmarkdownの記法
+          </a>
+        </Container>
       </div>
       {props.data.is_my_page ? (
-        <input
-          type="submit"
-          className="contents__post contents__post_button"
-          value="新規投稿"
-          onClick={() => {
-            history.push("/users/" + name + "/posts/new");
-          }}
-        ></input>
+        <span className="contents__post_button_area">
+          <Button
+            className="contents__post_button"
+            domState="primary"
+            value="新規投稿"
+            onClick={() => {
+              history.push("/users/" + name + "/posts/new");
+            }}
+          ></Button>
+        </span>
       ) : (
         <div></div>
       )}
-      <p className="contents__posts_list_title">記事</p>
-      <div className="contents__posts_list">{links}</div>
+      <Container title="記事">
+        <div className="contents__posts_list">{links}</div>
+      </Container>
     </div>
   );
 };

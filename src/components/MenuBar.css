@@ -1,45 +1,33 @@
 .MenuBar {
-  display: grid;
-  grid-template-columns: 4fr 3fr 1fr 1fr 1fr;
-  height: 50px;
-  background-color: rgb(144, 144, 255);
+  display: flex;
+  flex-flow: row;
+  margin: 0;
+  padding: 5px;
+  background-color: rgb(194, 194, 194);
+  justify-content: space-around;
 }
 
-.MenuBar__input {
+.Search {
+  display: flex;
+  flex-flow: row;
   margin: auto 0;
-  height: 25px;
-  border-radius: 8px;
-  border: none;
+  width: 40%;
+  padding: 10px;
 }
 
-.MenuBar__search_button {
-  height: 25px;
-  width: 60px;
+.Logo {
   margin: auto 0;
-  margin-left: 10px;
-  color: white;
-  background-color: rgb(63, 40, 189);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
+  margin-right: 100px;
 }
 
-.MenuBar__search_button:hover {
-  height: 25px;
-  width: 60px;
+.Account {
+  display: flex;
+  flex-flow: row;
   margin: auto 0;
-  margin-left: 10px;
-  color: white;
-  background-color: rgb(130, 110, 220);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
 }
 
 .MenuBar__titleText {
-  margin: auto auto;
   padding: 10px;
-  font-family: Arial, Helvetica, sans-serif;
   font-size: x-large;
   font-weight: bold;
   text-decoration: none;
@@ -47,66 +35,16 @@
   color: black;
 }
 
-.MenuBar__loginButton {
-  margin: auto;
-  padding: 5px 5px;
-  height: 25px;
-  background-color: rgb(63, 40, 189);
-  text-decoration: none;
-  color: white;
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
-}
-
-.MenuBar__myPageButton {
-  margin: auto;
-  padding: 5px 5px;
-  height: 25px;
-  background-color: rgb(63, 40, 189);
-  text-decoration: none;
-  color: white;
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
-}
-
-.MenuBar__loginButton:hover {
-  margin: auto;
-  padding: 5px 5px;
-  height: 25px;
-  text-decoration: none;
-  color: white;
-  background-color: rgb(130, 110, 220);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
-}
-
-.MenuBar__myPageButton:hover {
-  margin: auto;
-  padding: 5px 5px;
-  height: 25px;
-  text-decoration: none;
-  color: white;
-  background-color: rgb(130, 110, 220);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
-}
-
 .MenuBar__signUp {
-  margin: auto;
   text-decoration: none;
-  height: 25px;
-  border-radius: 5px;
   border: none;
+  margin: auto 0;
+  margin-left: 30px;
 }
 
 .MenuBar__logout {
-  margin: auto;
   text-decoration: none;
-  height: 25px;
-  border-radius: 5px;
   border: none;
+  margin: auto 0;
+  margin-left: 30px;
 }
