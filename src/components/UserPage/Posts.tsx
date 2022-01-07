@@ -1,6 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import { Container, Button } from "../../dot_style_generic_conponents/doms";
+import {
+  Container,
+  Button,
+  Div
+} from "../../dot_style_generic_conponents/doms";
+import { Radio } from "../../dot_style_generic_conponents/doms/input";
 import { getWithAuthenticate } from "../../utils/network/AxiosWrapper";
 import "./Posts.css";
 
@@ -11,6 +16,7 @@ type PostsProps = {
 
 export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   const [links, setLinks] = useState<Link[]>([]);
+  const [selected, setSelected] = useState("POSTS");
   const history = useHistory();
   const name = props.data.name;
   const dateToString = (date: Date) => {
@@ -18,6 +24,8 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
       date.getMonth() + 1
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
+
+  // TODO: use custom hooks
   useMemo(async () => {
     setLinks(
       await getWithAuthenticate("/users/" + name + "/posts")
@@ -71,7 +79,27 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
       ) : (
         <div></div>
       )}
-      <Container title="記事">
+      <Container className="with-title">
+        <Div className="title ps2p_text">
+          <label>
+            <Radio
+              checked={selected === "POSTS"}
+              onClick={() => {
+                setSelected("POSTS");
+              }}
+            ></Radio>
+            <span>POSTS</span>
+          </label>
+          <label>
+            <Radio
+              checked={selected === "BOOK_MARKS"}
+              onClick={() => {
+                setSelected("BOOK_MARKS");
+              }}
+            ></Radio>
+            <span>BOOK_MARKS</span>
+          </label>
+        </Div>
         <div className="contents__posts_list">{links}</div>
       </Container>
     </div>

@@ -1,11 +1,12 @@
 .user {
   height: 480px;
-  width: 380px;
+  max-width: 360px;
 }
 
 .user_info {
   margin: 10px;
   margin-left: 30%;
+  margin-right: 20px;
   margin-top: 20px;
   overflow: hidden;
 }

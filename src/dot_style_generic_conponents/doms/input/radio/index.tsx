@@ -3,7 +3,6 @@ import { ComponentBaseType } from "../../base_porps";
 
 type RadioProps = {
   checked?: boolean;
-  name: string;
   domState?: AllowedState;
 };
 
