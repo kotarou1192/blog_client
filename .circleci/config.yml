@@ -43,7 +43,7 @@ jobs:
             - yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: install dependencies
-          command: yarn install
+          command: yarn install --ignore-engines
       - save_cache:
           key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
