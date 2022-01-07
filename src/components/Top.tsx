@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Input } from "../dot_style_generic_conponents/doms";
+import { Input, Dialog, List } from "../dot_style_generic_conponents/doms";
 
 export const Top: React.FC<{}> = () => {
   /* TODO: dialogを作る
@@ -11,6 +11,13 @@ export const Top: React.FC<{}> = () => {
       <div>
         <h2>このサイトについて</h2>
         {<Input.Text domState="success"></Input.Text>}
+        <Dialog
+          buttonStyle="warning"
+          dialogBoarderStyle="rounded"
+          dialogInfoText="a"
+          dialogOpenButtonText="open"
+        ></Dialog>
+        <List listStyle="circle" listValues={["A", "B"]}></List>
         <p>
           ブログを書きたいなと思ったので制作しているブログ投稿アプリです。
           <br></br>
