@@ -32,9 +32,6 @@ jobs:
       - image: cimg/node:15.1
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
-
-    environment:
-      NODE_ENV: production
     
     steps:
       - checkout
