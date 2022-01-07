@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import {
   Container,
@@ -6,7 +6,8 @@ import {
   Div
 } from "../../dot_style_generic_conponents/doms";
 import { Radio } from "../../dot_style_generic_conponents/doms/input";
-import { getWithAuthenticate } from "../../utils/network/AxiosWrapper";
+import { useGetAPI } from "../../utils/useAPI";
+import { NotFound } from "../NotFound";
 import "./Posts.css";
 
 type PostsProps = {
@@ -15,8 +16,7 @@ type PostsProps = {
 };
 
 export const Posts: React.FC<{ data: PostsProps }> = (props) => {
-  const [links, setLinks] = useState<Link[]>([]);
-  const [selected, setSelected] = useState("POSTS");
+  const [selected, setSelected] = useState("posts");
   const history = useHistory();
   const name = props.data.name;
   const dateToString = (date: Date) => {
@@ -25,33 +25,27 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
 
-  // TODO: use custom hooks
-  useMemo(async () => {
-    setLinks(
-      await getWithAuthenticate("/users/" + name + "/posts")
-        .then((res) =>
-          res.data.map((post: any, index: number) => {
-            const date = new Date(post.created_at * 1000);
-            return (
-              <Link
-                key={index}
-                className="posts_list_item"
-                to={`/users/${name}/posts/${post.id}`}
-              >
-                <p className="posts_list_item__date">
-                  {dateToString(date) + "に投稿"}
-                </p>
-                <p className="posts_list_item__title">{post.title}</p>
-              </Link>
-            );
-          })
-        )
-        .catch((e) => {
-          console.log(e);
-          return [];
-        })
+  const links: 404 | undefined | any[] = useGetAPI(
+    "/users/" + name + "/" + "posts" //selected
+  );
+
+  if (!links) return <NotFound />;
+  if (links === 404) return <NotFound />;
+
+  const linkComponents = links.map((post: any, index: number) => {
+    const date = new Date(post.created_at * 1000);
+    return (
+      <Link
+        key={index}
+        className="posts_list_item"
+        to={`/users/${name}/posts/${post.id}`}
+      >
+        <p className="posts_list_item__date">{dateToString(date) + "に投稿"}</p>
+        <p className="posts_list_item__title">{post.title}</p>
+      </Link>
     );
-  }, []);
+  });
+
   return (
     <div className="contents">
       <div className="contents__info">
@@ -83,24 +77,24 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
         <Div className="title ps2p_text">
           <label>
             <Radio
-              checked={selected === "POSTS"}
-              onClick={() => {
-                setSelected("POSTS");
+              checked={selected === "posts"}
+              onChange={() => {
+                setSelected("posts");
               }}
             ></Radio>
             <span>POSTS</span>
           </label>
           <label>
             <Radio
-              checked={selected === "BOOK_MARKS"}
-              onClick={() => {
-                setSelected("BOOK_MARKS");
+              checked={selected === "book_marks"}
+              onChange={() => {
+                setSelected("book_marks");
               }}
             ></Radio>
             <span>BOOK_MARKS</span>
           </label>
         </Div>
-        <div className="contents__posts_list">{links}</div>
+        <div className="contents__posts_list">{linkComponents}</div>
       </Container>
     </div>
   );
