@@ -14,35 +14,19 @@
 
 .editor__button_area {
   margin: auto;
+  width: 340px;
 }
 
 .editor__preview_button {
   width: 140px;
-  height: 26px;
-  color: white;
-  background-color: rgb(143, 143, 143);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
-}
-
-.editor__preview_button:hover {
-  background-color: rgb(199, 199, 199);
 }
 
 .editor__submit_button {
-  margin-left: 20px;
   width: 140px;
-  height: 26px;
-  color: white;
-  background-color: rgb(143, 143, 143);
-  border-radius: 5px;
-  border-color: rgb(212, 212, 212);
-  border-style: solid;
 }
 
-.editor__submit_button:hover {
-  background-color: rgb(199, 199, 199);
+.button_margin {
+  margin-left: 20px;
 }
 
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { UserPage } from "./UserPage";
+import { UserPage } from "./UserPage/UserPage";
 import { getUserName } from "../utils/CookiesWrapper";
 
 export const MyPage: React.FC<{}> = () => {

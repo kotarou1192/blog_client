@@ -1,9 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import {
-  deleteWithAuthenticate,
-  getWithAuthenticate
-} from "../utils/network/AxiosWrapper";
+import { deleteWithAuthenticate } from "../utils/network/AxiosWrapper";
 import "./PostItem.css";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -13,6 +10,8 @@ import {
   ReactMarkdownNames
 } from "react-markdown/lib/ast-to-react";
 import { getUserName } from "../utils/CookiesWrapper";
+import { useGetAPI } from "../utils/useAPI";
+import { Button, Dialog } from "../dot_style_generic_conponents/doms";
 
 type PostItemProps = {
   match: {
@@ -33,8 +32,6 @@ type PostItemParams = {
 };
 
 export const PostItem: React.FC<PostItemProps> = (props) => {
-  const [postItem, setPostItem] = useState<PostItemParams | undefined>();
-  const [submitDelete, setSubmitDelete] = useState(false);
   const history = useHistory();
   const name = props.match.params.name;
   const id = props.match.params.id;
@@ -45,16 +42,7 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
 
-  useMemo(async () => {
-    setPostItem(
-      await getWithAuthenticate("/users/" + name + "/posts/" + id)
-        .then((res) => res.data)
-        .catch((e) => {
-          console.log(e);
-          return undefined;
-        })
-    );
-  }, []);
+  const postItem: PostItemParams = useGetAPI("/users/" + name + "/posts/" + id);
 
   if (postItem == undefined) return <div></div>;
 
@@ -68,23 +56,17 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
               {name}
             </Link>
             <div className="post_edit__button_area">
-              <input
-                type="submit"
+              <Button
                 className="post_edit__submit_button"
                 hidden={name !== myName}
                 value="編集"
                 onClick={() =>
                   history.push("/users/" + name + "/posts/" + id + "/edit")
                 }
-              ></input>
-              <DeleteButton
-                name={name}
-                setSubmitDelete={setSubmitDelete}
-                myName={myName}
-                id={id}
-                submitDelete={submitDelete}
-                history={history}
-              />
+              ></Button>
+              <span className="margin_left" hidden={name !== myName}>
+                <DeleteButton name={name} id={id} history={history} />
+              </span>
             </div>
           </div>
           <div className="head__base head__date">
@@ -110,42 +92,27 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
 
 type ButtonProps = {
   name: string;
-  myName: string;
-  submitDelete: boolean;
   history: any;
   id: number;
-  setSubmitDelete: any;
 };
 
-const DeleteButton: React.FC<ButtonProps> = ({
-  name,
-  myName,
-  submitDelete,
-  history,
-  id,
-  setSubmitDelete
-}) => {
+const DeleteButton: React.FC<ButtonProps> = ({ name, history, id }) => {
   return (
-    <input
-      type="submit"
-      className="post_delete__submit_button"
-      hidden={name !== myName}
-      value="削除"
-      onClick={() => {
-        if (submitDelete) {
-          deleteWithAuthenticate("/users/" + name + "/posts/" + id).then(
-            (res) => {
-              if (res.status === 200) return history.push("/users/" + name);
-            }
-          );
-          return;
-        }
-        window.alert(
-          "本当に削除しますか？\n一度消すと戻せません\n確定する場合はもう一度【削除】を押してください"
+    <Dialog
+      buttonStyle="error"
+      dialogSubmitButtonText="!削除!"
+      dialogOpenButtonText="削除"
+      dialogTitleText="本当に削除しますか？"
+      dialogInfoText="一度消すと戻せません"
+      handleCancel={() => {}}
+      handleSubmit={() => {
+        deleteWithAuthenticate("/users/" + name + "/posts/" + id).then(
+          (res) => {
+            if (res.status === 200) return history.push("/users/" + name);
+          }
         );
-        setSubmitDelete(true);
       }}
-    ></input>
+    ></Dialog>
   );
 };
 

@@ -8,7 +8,7 @@ import { Top } from "./Top";
 import { MenuBar } from "./MenuBar";
 import { Login } from "./LoginContainer/Login";
 import { sitekey } from "../utils/Constants";
-import { UserPage } from "./UserPage";
+import { UserPage } from "./UserPage/UserPage";
 import { MyPage } from "./MyPage";
 import { SearchResults } from "./SearchResults";
 import { PostItem } from "./PostItem";

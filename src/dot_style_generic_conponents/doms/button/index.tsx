@@ -11,13 +11,14 @@ type AllowedStates = "primary" | "success" | "warning" | "error" | "disabled";
 export const Button: React.FC<ComponentBaseType & ButtonProps> = ({
   domState,
   value,
+  className,
   ...props
 }) => {
   const additionalClassName = domState != null ? " is-" + domState : "";
   return (
     <button
       type="button"
-      className={"ps2p_text nes-btn " + additionalClassName}
+      className={className + " ps2p_text nes-btn " + additionalClassName}
       {...props}
     >
       {value}

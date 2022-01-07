@@ -2,6 +2,5 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   grid-template-rows: 1fr;
-  background-color: rgb(247, 247, 247);
   min-height: calc(100vh - 70px);
 }
