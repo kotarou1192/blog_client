@@ -53,6 +53,7 @@ jobs:
         # check https://circleci.com/docs/ja/2.0/circleci-images/#postgresql
         - image: cimg/node:15.1
         
+      resource_class: xlarge
       steps:
         - checkout
         - restore_cache:
