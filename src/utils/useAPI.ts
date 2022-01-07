@@ -11,6 +11,6 @@ export function useGetAPI(apiName: string, params?: object): 404 | any {
       .catch((err) => {
         if (err.response.status == 404) setResult(err.response.status);
       });
-  }, [params]);
+  }, [params, apiName]);
   return result;
 }
