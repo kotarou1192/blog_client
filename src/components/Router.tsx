@@ -14,6 +14,7 @@ import { SearchResults } from "./SearchResults";
 import { PostItem } from "./PostItem";
 import { CreatePost } from "./CreatePost";
 import { UpdatePost } from "./UpdatePost";
+import { NotFound } from "./NotFound";
 
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
@@ -62,6 +63,9 @@ export const Router: React.FC<{}> = () => {
         </Route>
         <Route path="/account/create">
           <AccountCreate></AccountCreate>
+        </Route>
+        <Route>
+          <NotFound></NotFound>
         </Route>
       </Switch>
     </div>

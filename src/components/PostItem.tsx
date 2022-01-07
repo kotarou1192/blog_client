@@ -12,6 +12,7 @@ import {
 import { getUserName } from "../utils/CookiesWrapper";
 import { useGetAPI } from "../utils/useAPI";
 import { Button, Dialog } from "../dot_style_generic_conponents/doms";
+import { NotFound } from "./NotFound";
 
 type PostItemProps = {
   match: {
@@ -42,9 +43,13 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
 
-  const postItem: PostItemParams = useGetAPI("/users/" + name + "/posts/" + id);
+  const postItem: 404 | undefined | PostItemParams = useGetAPI(
+    "/users/" + name + "/posts/" + id
+  );
 
   if (postItem == undefined) return <div></div>;
+
+  if (postItem === 404) return <NotFound></NotFound>;
 
   return (
     <div className="post_item_base">
