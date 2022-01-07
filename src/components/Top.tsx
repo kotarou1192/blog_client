@@ -2,6 +2,9 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Top: React.FC<{}> = () => {
+  /* TODO: dialogを作る
+   * https://nostalgic-css.github.io/NES.css/#
+   */
   return (
     <div>
       <div>

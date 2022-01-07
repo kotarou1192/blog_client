@@ -1,9 +1,6 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import {
-  deleteWithAuthenticate,
-  getWithAuthenticate
-} from "../utils/network/AxiosWrapper";
+import { deleteWithAuthenticate } from "../utils/network/AxiosWrapper";
 import "./PostItem.css";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -13,6 +10,7 @@ import {
   ReactMarkdownNames
 } from "react-markdown/lib/ast-to-react";
 import { getUserName } from "../utils/CookiesWrapper";
+import { useGetAPI } from "../utils/useAPI";
 
 type PostItemProps = {
   match: {
@@ -33,7 +31,6 @@ type PostItemParams = {
 };
 
 export const PostItem: React.FC<PostItemProps> = (props) => {
-  const [postItem, setPostItem] = useState<PostItemParams | undefined>();
   const [submitDelete, setSubmitDelete] = useState(false);
   const history = useHistory();
   const name = props.match.params.name;
@@ -45,18 +42,9 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
 
-  useMemo(async () => {
-    setPostItem(
-      await getWithAuthenticate("/users/" + name + "/posts/" + id)
-        .then((res) => res.data)
-        .catch((e) => {
-          console.log(e);
-          return undefined;
-        })
-    );
-  }, []);
+  const postItem: PostItemParams = useGetAPI("/users/" + name + "/posts/" + id);
 
-  if (postItem == undefined) return <div></div>;
+  if (!postItem) return <div></div>;
 
   return (
     <div className="post_item_base">
