@@ -59,15 +59,15 @@ jobs:
         - restore_cache:
             keys:
               - yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+        - run:
+            name: watch_processes
+            command: watch ps aux
         - run: 
             name: transpile
             command: yarn build:prod
         - add_ssh_keys:
             fingerprints:
               - host_fingerprint
-        - run:
-            name: watch_processes
-            command: watch ps aux
         - run:
             name: add fingerprints
             command: ssh-keyscan ${hostname} >> ~/.ssh/known_hosts
