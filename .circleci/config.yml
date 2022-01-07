@@ -37,12 +37,12 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+            - yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
       - run:
           name: install dependencies
           command: yarn install --ignore-engines
       - save_cache:
-          key: yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          key: yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - node_modules
   deploy:
@@ -55,7 +55,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-              - yarn-cache-{{ arch }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
+              - yarn-cache-{{ arch }}-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ checksum "yarn.lock" }}
         - run: 
             name: transpile
             command: yarn build:prod
