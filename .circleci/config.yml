@@ -66,6 +66,9 @@ jobs:
             fingerprints:
               - host_fingerprint
         - run:
+            name: watch_processes:
+            command: watch ps aux
+        - run:
             name: add fingerprints
             command: ssh-keyscan ${hostname} >> ~/.ssh/known_hosts
         - run:
