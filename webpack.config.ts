@@ -2,7 +2,8 @@ import path from "path";
 import webpack from "webpack";
 import "webpack-dev-server";
 import HtmlWebpackPlugin from "html-webpack-plugin";
-const AppCachePlugin = require('appcache-webpack-plugin');
+const AppCachePlugin = require("appcache-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const webpackConfig: webpack.Configuration = {
@@ -18,9 +19,15 @@ const webpackConfig: webpack.Configuration = {
     filename: "[name].bundle.js"
   },
   optimization: {
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        parallel: 6
+      })
+    ],
     splitChunks: {
       name: "vendor",
-      chunks: "initial",
+      chunks: "initial"
     }
   },
   module: {
@@ -61,19 +68,19 @@ const webpackConfig: webpack.Configuration = {
     // new BundleAnalyzerPlugin(),
     new AppCachePlugin({
       // target files to cache.
-      cache: ['vendor.bundle.js'],
+      cache: ["vendor.bundle.js"],
       // target files to access with network everytime (no cache).
-      network: ['main.bundle.js'],
+      network: ["main.bundle.js"],
       // if can't access the resource, rallback this file.
-      fallback: [''],
+      fallback: [""],
       // prefer-online: use cache only offline
       // settings: ['prefer-online'],
 
       // Exclude file(s).
       // exclude: ["a.txt", /vendor\.bundle\.js$/],
-      output: 'manifest.appcache'
+      output: "manifest.appcache"
     })
-]
+  ]
 };
 
 export default webpackConfig;
