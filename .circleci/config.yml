@@ -34,7 +34,7 @@ jobs:
     # CircleCI will report the results back to your VCS provider.
 
     environment:
-      - NODE_DNV: production
+      - NODE_ENV: production
     
     steps:
       - checkout
