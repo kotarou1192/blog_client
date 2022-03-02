@@ -1,11 +1,5 @@
 import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
-import {
-  Container,
-  Button,
-  Div
-} from "../../dot_style_generic_conponents/doms";
-import { Radio } from "../../dot_style_generic_conponents/doms/input";
 import { useGetAPI } from "../../utils/useAPI";
 import { NotFound } from "../NotFound";
 import "./Posts.css";

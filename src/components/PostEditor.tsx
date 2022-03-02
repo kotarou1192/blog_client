@@ -11,7 +11,6 @@ import { AxiosResponse } from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Button, Container } from "../dot_style_generic_conponents/doms";
 
 type PostEdirotProps = {
   post: {

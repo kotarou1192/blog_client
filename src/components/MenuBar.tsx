@@ -2,7 +2,6 @@ import React from "react";
 import "./MenuBar.css";
 import { Link, useHistory } from "react-router-dom";
 import { LoggedIn, logout } from "../utils/CookiesWrapper";
-import { Button, Input } from "../dot_style_generic_conponents/doms";
 
 type MenuBarProps = {
   keywords: string;

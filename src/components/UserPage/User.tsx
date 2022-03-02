@@ -1,5 +1,4 @@
 import React from "react";
-import { Container } from "../../dot_style_generic_conponents/doms";
 import "./User.css";
 
 type UserProps = {

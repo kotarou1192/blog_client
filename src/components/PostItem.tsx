@@ -11,7 +11,6 @@ import {
 } from "react-markdown/lib/ast-to-react";
 import { getUserName } from "../utils/CookiesWrapper";
 import { useGetAPI } from "../utils/useAPI";
-import { Button, Dialog } from "../dot_style_generic_conponents/doms";
 import { NotFound } from "./NotFound";
 
 type PostItemProps = {
