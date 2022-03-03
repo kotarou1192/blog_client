@@ -11,8 +11,15 @@ import {
 } from "react-markdown/lib/ast-to-react";
 import { getUserName } from "../utils/CookiesWrapper";
 import { useGetAPI } from "../utils/useAPI";
-import { Button, Dialog } from "../dot_style_generic_conponents/doms";
 import { NotFound } from "./NotFound";
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions
+} from "@mui/material";
 
 type PostItemProps = {
   match: {
@@ -102,22 +109,52 @@ type ButtonProps = {
 };
 
 const DeleteButton: React.FC<ButtonProps> = ({ name, history, id }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
-    <Dialog
-      buttonStyle="error"
-      dialogSubmitButtonText="!削除!"
-      dialogOpenButtonText="削除"
-      dialogTitleText="本当に削除しますか？"
-      dialogInfoText="一度消すと戻せません"
-      handleCancel={() => {}}
-      handleSubmit={() => {
-        deleteWithAuthenticate("/users/" + name + "/posts/" + id).then(
-          (res) => {
-            if (res.status === 200) return history.push("/users/" + name);
-          }
-        );
-      }}
-    ></Dialog>
+    <div>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open alert dialog
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"DELETE THIS POST?"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            一度消すと元に戻すことはできません。 本当に削除しますか？
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} autoFocus>
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              handleClose();
+              deleteWithAuthenticate("/users/" + name + "/posts/" + id).then(
+                (res) => {
+                  if (res.status === 200) return history.push("/users/" + name);
+                }
+              );
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 

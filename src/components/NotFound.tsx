@@ -1,11 +1,19 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { fa0, fa4 } from "@fortawesome/free-solid-svg-icons";
+import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 import React from "react";
-import "./NotFound.css";
+import { Container, Typography } from "@mui/material";
 
 export const NotFound: React.FC<{}> = () => {
   return (
-    <div className="notfound">
-      <h2 className="text ps2p_text">404 NOT FOUND</h2>
-      <p className="text ps2p_text">This is not what you are searching for.</p>
-    </div>
+    <Container sx={{ textAlign: "center", mt: "70px" }}>
+      <FontAwesomeIcon icon={fa4} fontSize="60px" />
+      <FontAwesomeIcon icon={fa0} fontSize="60px" />
+      <FontAwesomeIcon icon={fa4} fontSize="60px" />
+      <p>
+        <FontAwesomeIcon icon={faFaceSadTear} fontSize="80px" />
+      </p>
+      <Typography mt={5}>This is not what you are searching for.</Typography>
+    </Container>
   );
 };

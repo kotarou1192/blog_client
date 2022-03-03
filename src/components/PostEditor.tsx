@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { useState } from "react";
-import "./PostEditor.css";
 import {
   CodeComponent,
   ReactMarkdownNames
@@ -11,7 +10,14 @@ import { AxiosResponse } from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
-import { Button, Container } from "../dot_style_generic_conponents/doms";
+import {
+  Toolbar,
+  TextField,
+  Button,
+  Container,
+  TextareaAutosize
+} from "@mui/material";
+import "./hideScrollbar.css";
 
 type PostEdirotProps = {
   post: {
@@ -45,35 +51,30 @@ export const PostEditor: React.FC<PostEdirotProps> = (props) => {
   };
 
   return (
-    <div className="editor_base">
-      <div></div>
-      <div className="editor">
-        <div className="editor__button_area">
-          <Button
-            domState="primary"
-            className="editor__preview_button"
-            disabled={props.buttonDisabled}
-            onClick={() => setPreview(!isPreview)}
-            value={isPreview ? "編集に戻る" : "プレビュー"}
-          ></Button>
-          <span className="button_margin">
-            <Button
-              disabled={props.buttonDisabled}
-              domState="success"
-              className="editor__submit_button"
-              value="投稿"
-              onClick={buttonDisableWhenRequest}
-            ></Button>
-          </span>
-        </div>
-        {isPreview ? (
-          <Preview title={props.post.title} body={props.post.body} />
-        ) : (
-          <Editor post={props.post} setPost={props.setPost} />
-        )}
-      </div>
-      <div></div>
-    </div>
+    <Container>
+      <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Button
+          variant="outlined"
+          disabled={props.buttonDisabled}
+          onClick={() => setPreview(!isPreview)}
+        >
+          {isPreview ? "編集に戻る" : "プレビュー"}
+        </Button>
+        <Button
+          variant="contained"
+          disabled={props.buttonDisabled}
+          onClick={buttonDisableWhenRequest}
+          sx={{ ml: "80%" }}
+        >
+          投稿
+        </Button>
+      </Toolbar>
+      {isPreview ? (
+        <Preview title={props.post.title} body={props.post.body} />
+      ) : (
+        <Editor post={props.post} setPost={props.setPost} />
+      )}
+    </Container>
   );
 };
 
@@ -125,26 +126,36 @@ const Editor: React.FC<{
   setPost: any;
 }> = (props) => {
   return (
-    <div className="editor">
-      <input
-        type="text"
-        className="nes-container editor__title_input"
-        placeholder="NoTitle"
-        value={props.post.title}
-        onChange={(el: any) =>
-          props.setPost({ body: props.post.body, title: el.target.value })
-        }
-      ></input>
-      <Container title="body" className="editor__body_input">
-        <textarea
-          className="editor__body_textarea"
-          value={props.post.body}
-          onChange={(el) =>
-            props.setPost({ title: props.post.title, body: el.target.value })
+    <Container maxWidth="lg">
+      <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <TextField
+          id="standard-basic"
+          fullWidth
+          label="Title"
+          variant="standard"
+          value={props.post.title}
+          onChange={(el: any) =>
+            props.setPost({ body: props.post.body, title: el.target.value })
           }
-        ></textarea>
-      </Container>
-    </div>
+        />
+      </Toolbar>
+      <TextareaAutosize
+        className="scrollbar__hide"
+        value={props.post.body}
+        onChange={(el) =>
+          props.setPost({ title: props.post.title, body: el.target.value })
+        }
+        minRows={38}
+        maxRows={38}
+        style={{
+          resize: "none",
+          display: "block",
+          width: "100%",
+          padding: "20px",
+          overflowY: "scroll"
+        }}
+      ></TextareaAutosize>
+    </Container>
   );
 };
 
