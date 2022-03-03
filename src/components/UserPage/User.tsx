@@ -1,5 +1,6 @@
 import React from "react";
-import "./User.css";
+import Typography from "@mui/material/Typography";
+import { Card } from "@mui/material";
 
 type UserProps = {
   name: string;
@@ -7,14 +8,21 @@ type UserProps = {
 };
 
 export const User: React.FC<{ data: UserProps }> = (props) => {
+  const { name } = props.data;
+
   return (
-    <div className="user_info">
-      <p className="space"></p>
-      <Container className="with-title user">
-        <p className="ps2p_text title">{props.data.name}</p>
-        <div className="user__image"></div>
-        <div className="user__info_text">something</div>
-      </Container>
-    </div>
+    <Card
+      sx={{
+        mr: 2,
+        borderStyle: "inherit",
+        minHeight: "400px",
+        textAlign: "center"
+      }}
+    >
+      <Typography variant="h5" fontWeight="bold" gutterBottom mt="10px">
+        {name}
+      </Typography>
+      <Typography>description is here</Typography>
+    </Card>
   );
 };
