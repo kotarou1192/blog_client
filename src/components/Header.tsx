@@ -91,7 +91,10 @@ const AccountContainer = () => {
       </Button>
       <Button
         onClick={() => {
-          if (loggedIn) return logout();
+          if (loggedIn) {
+            logout();
+            return history.push("/");
+          }
           history.push("/account/want_to_create");
         }}
       >
