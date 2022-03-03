@@ -28,7 +28,7 @@
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "webpack-dev-server --mode development --open",
+    "start": "yarn run webpack-dev-server --mode development --open",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "build:prod": "webpack -p --define process.env.NODE_ENV='\"production\"' --config ./webpack.config.ts",
