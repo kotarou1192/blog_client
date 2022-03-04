@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccountCreate } from "./Account/AccountCreate";
-import { Route, Switch, Link } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import * as network from "../utils/network";
@@ -51,7 +51,6 @@ export const Router: React.FC<{}> = () => {
         <Container maxWidth="xl" sx={{ bgcolor: "white" }}>
           <Switch>
             <Route exact path="/">
-              <Link to="/account/create">aaa</Link>
               <Top />
             </Route>
             <Route path="/login">
