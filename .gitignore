@@ -9,3 +9,6 @@ yarn-error.log*
 /public/*.js
 /public/*.json
 /public/*.txt
+
+# icons
+public/*.png
