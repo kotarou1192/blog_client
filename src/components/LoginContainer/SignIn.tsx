@@ -11,7 +11,6 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useCallback, useEffect, useState } from "react";
 import { login, rememberLogin } from "../../utils/network/AxiosWrapper";
@@ -59,8 +58,6 @@ export const SignIn: React.FC<{}> = () => {
   return <SignInField recaptchaToken={token}></SignInField>;
 };
 
-const theme = createTheme();
-
 type SignInFieldProps = {
   recaptchaToken: string;
 };
@@ -87,13 +84,17 @@ const SignInField: React.FC<SignInFieldProps> = (props) => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <Container maxWidth="xl" sx={{ backgroundColor: "#fafafa" }}>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
             marginTop: 8,
             display: "flex",
+            padding: "10px",
+            pr: "30px",
+            pl: "30px",
+            bgcolor: "white",
             flexDirection: "column",
             alignItems: "center"
           }}
@@ -185,9 +186,9 @@ const SignInField: React.FC<SignInFieldProps> = (props) => {
               </Grid>
             </Grid>
           </Box>
+          <Copyright sx={{ mt: 8, mb: 4 }} />
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
+    </Container>
   );
 };

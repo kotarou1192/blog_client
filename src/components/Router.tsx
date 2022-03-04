@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AccountCreate } from "./Account/AccountCreate";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Link } from "react-router-dom";
 import { AccountCreationManager } from "./Account/AccountCreationManager";
 import { GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 import * as network from "../utils/network";
@@ -21,6 +21,7 @@ import {
   CssBaseline,
   ThemeProvider
 } from "@mui/material";
+import "./hideScrollbar.css";
 
 const theme = createTheme({
   components: {
@@ -45,53 +46,56 @@ export const Router: React.FC<{}> = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Header keywords={keywords} setKeywords={setKeywords} />
-      <Container maxWidth="xl">
-        <Switch>
-          <Route exact path="/">
-            <Top />
-          </Route>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route exact path="/users/:name" component={UserPage}></Route>
-          <Route path="/me">
-            <MyPage />
-          </Route>
-          <Route
-            exact
-            path="/users/:name/posts/new"
-            component={CreatePost}
-          ></Route>
-          <Route
-            exact
-            path="/users/:name/posts/:id/edit"
-            component={UpdatePost}
-          ></Route>
-          <Route path="/users/:name/posts/:id" component={PostItem}></Route>
-          <Route path="/search/users">
-            <SearchResults
-              results={results}
-              keywords={keywords}
-              setResults={setResults}
-              setKeywords={setKeywords}
-            />
-          </Route>
-          <Route path="/account/want_to_create">
-            <GoogleReCaptchaProvider reCaptchaKey={sitekey} language="ja">
-              <AccountCreationManager
-                creationFailed={query.get("failed") === "true"}
-              ></AccountCreationManager>
-            </GoogleReCaptchaProvider>
-          </Route>
-          <Route path="/account/create">
-            <AccountCreate></AccountCreate>
-          </Route>
-          <Route>
-            <NotFound></NotFound>
-          </Route>
-        </Switch>
-      </Container>
+      <div className="scrollbar__hide" style={{ backgroundColor: "#fafafa" }}>
+        <Header keywords={keywords} setKeywords={setKeywords} />
+        <Container maxWidth="xl" sx={{ bgcolor: "white" }}>
+          <Switch>
+            <Route exact path="/">
+              <Link to="/account/create">aaa</Link>
+              <Top />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+            <Route exact path="/users/:name" component={UserPage}></Route>
+            <Route path="/me">
+              <MyPage />
+            </Route>
+            <Route
+              exact
+              path="/users/:name/posts/new"
+              component={CreatePost}
+            ></Route>
+            <Route
+              exact
+              path="/users/:name/posts/:id/edit"
+              component={UpdatePost}
+            ></Route>
+            <Route path="/users/:name/posts/:id" component={PostItem}></Route>
+            <Route path="/search/users">
+              <SearchResults
+                results={results}
+                keywords={keywords}
+                setResults={setResults}
+                setKeywords={setKeywords}
+              />
+            </Route>
+            <Route path="/account/want_to_create">
+              <GoogleReCaptchaProvider reCaptchaKey={sitekey} language="ja">
+                <AccountCreationManager
+                  creationFailed={query.get("failed") === "true"}
+                ></AccountCreationManager>
+              </GoogleReCaptchaProvider>
+            </Route>
+            <Route path="/account/create">
+              <AccountCreate></AccountCreate>
+            </Route>
+            <Route>
+              <NotFound></NotFound>
+            </Route>
+          </Switch>
+        </Container>
+      </div>
     </ThemeProvider>
   );
 };

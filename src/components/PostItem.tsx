@@ -1,7 +1,6 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { deleteWithAuthenticate } from "../utils/network/AxiosWrapper";
-import "./PostItem.css";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import ReactMarkdown from "react-markdown";
@@ -16,10 +15,19 @@ import {
   Button,
   Dialog,
   DialogTitle,
+  Link,
   DialogContent,
+  Typography,
   DialogContentText,
-  DialogActions
+  DialogActions,
+  Container,
+  Toolbar,
+  Grid
 } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPen } from "@fortawesome/free-solid-svg-icons";
+import DeleteIcon from "@mui/icons-material/Delete";
+import "./hideScrollbar.css";
 
 type PostItemProps = {
   match: {
@@ -54,51 +62,72 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
     "/users/" + name + "/posts/" + id
   );
 
-  if (postItem == undefined) return <div></div>;
+  if (postItem == undefined)
+    return (
+      <Container
+        disableGutters
+        fixed
+        sx={{ width: "100hv", bgcolor: "white" }}
+      ></Container>
+    );
 
   if (postItem === 404) return <NotFound></NotFound>;
 
   return (
-    <div className="post_item_base">
-      <div></div>
-      <div className="post_item">
-        <div className="post_item__head">
-          <div className="head__oneline">
-            <Link to={"/users/" + name} className="head__user_name">
-              {name}
-            </Link>
-            <div className="post_edit__button_area">
+    <Container disableGutters fixed sx={{ width: "100hv" }}>
+      <Toolbar sx={{ borderBottom: 1, width: "100hv", borderColor: "divider" }}>
+        <Link href={"/users/" + name} underline="hover">
+          @{name}
+        </Link>
+        <Typography
+          variant="body2"
+          align="left"
+          sx={{ flexGrow: 1, fontSize: "small", color: "#a0a0a0", ml: "20px" }}
+        >
+          <span style={{ color: "black" }}>投稿: </span>
+          {dateToString(new Date(postItem.created_at * 1000))}
+          <span style={{ color: "black" }}>{" 最終更新: "}</span>
+          {dateToString(new Date(postItem.updated_at * 1000))}
+        </Typography>
+        <span hidden={name !== myName}>
+          <Grid container sx={{ align: "right" }}>
+            <Grid item>
               <Button
-                className="post_edit__submit_button"
-                hidden={name !== myName}
-                value="編集"
+                startIcon={<FontAwesomeIcon icon={faPen} />}
+                variant="outlined"
                 onClick={() =>
                   history.push("/users/" + name + "/posts/" + id + "/edit")
                 }
-              ></Button>
-              <span className="margin_left" hidden={name !== myName}>
-                <DeleteButton name={name} id={id} history={history} />
-              </span>
-            </div>
-          </div>
-          <div className="head__base head__date">
-            <p className="head__base date__created_at">
-              投稿: {dateToString(new Date(postItem.created_at * 1000))}
-            </p>
-            <p className="head__base date__updated_at">
-              最終更新: {dateToString(new Date(postItem.updated_at * 1000))}
-            </p>
-          </div>
-          <p className="head__base head__title">{postItem.title}</p>
-        </div>
-        <div className="post_item__body">
-          <ReactMarkdown components={{ code: CodeBlock }}>
-            {postItem.body}
-          </ReactMarkdown>
-        </div>
-      </div>
-      <div></div>
-    </div>
+              >
+                編集
+              </Button>
+            </Grid>
+            <Grid item>
+              <DeleteButton name={name} id={id} history={history} />
+            </Grid>
+          </Grid>
+        </span>
+      </Toolbar>
+      <Container
+        sx={{
+          overflowY: "hidden",
+          boxShadow: "0 0 4px gray",
+          mt: "10px"
+        }}
+      >
+        <Typography
+          component="h2"
+          variant="h4"
+          fontWeight="bold"
+          sx={{ pt: "10px", borderBottom: 1, borderColor: "gray" }}
+        >
+          {postItem.title}
+        </Typography>
+        <ReactMarkdown components={{ code: CodeBlock }}>
+          {postItem.body}
+        </ReactMarkdown>
+      </Container>
+    </Container>
   );
 };
 
@@ -121,8 +150,12 @@ const DeleteButton: React.FC<ButtonProps> = ({ name, history, id }) => {
 
   return (
     <div>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
+      <Button
+        variant="outlined"
+        onClick={handleClickOpen}
+        startIcon={<DeleteIcon />}
+      >
+        削除
       </Button>
       <Dialog
         open={open}

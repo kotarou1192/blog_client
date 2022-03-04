@@ -1,13 +1,13 @@
 import * as React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import SearchIcon from "@mui/icons-material/Search";
-import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
-import { ButtonGroup, Button } from "@mui/material";
+import { ButtonGroup, Button, Typography } from "@mui/material";
 import { logout, LoggedIn } from "../utils/CookiesWrapper";
 import { useHistory } from "react-router-dom";
+import { headerLogoURL } from "../utils/Constants";
 
 type MenuBarProps = {
   keywords: string;
@@ -47,12 +47,17 @@ export const Header: React.FC<MenuBarProps> = (props) => {
           align="center"
           noWrap
           sx={{
-            flex: 1,
-            fontFamily: "fantasy"
+            flex: 1
           }}
         >
-          <Link href="/" underline="hover" color="black">
-            BLOG.md
+          <Link href="/" align="center">
+            <img
+              src={headerLogoURL}
+              style={{
+                width: "160px",
+                height: "80px"
+              }}
+            />
           </Link>
         </Typography>
         <Search>

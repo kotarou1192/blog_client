@@ -4,7 +4,7 @@ import {
   CodeComponent,
   ReactMarkdownNames
 } from "react-markdown/lib/ast-to-react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { getUserName } from "../utils/CookiesWrapper";
 import { AxiosResponse } from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
@@ -13,6 +13,8 @@ import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
 import {
   Toolbar,
   TextField,
+  Typography,
+  Link,
   Button,
   Container,
   TextareaAutosize
@@ -91,30 +93,40 @@ const Preview: React.FC<{ title: string; body: string }> = ({
   title = title === "" ? "NoTitle" : title;
 
   return (
-    <div className="post_item">
-      <div className="post_item__head">
-        <div className="head__base">
-          <Link to={"/users/" + name} className="head__user_name">
-            {getUserName()}
-          </Link>
-        </div>
-        <div className="head__base head__date">
-          <p className="head__base date__created_at">
-            投稿: {dateToString(new Date())}
-          </p>
-          <p className="head__base date__updated_at">
-            最終更新: {dateToString(new Date())}
-          </p>
-        </div>
-        <p className="head__base head__title">{title}</p>
-      </div>
-      <ReactMarkdown
-        className="post_item__body"
-        components={{ code: CodeBlock }}
+    <Container disableGutters fixed sx={{ width: "100hv" }}>
+      <Toolbar sx={{ borderBottom: 1, width: "100hv", borderColor: "divider" }}>
+        <Link href="#" underline="hover">
+          {getUserName()}
+        </Link>
+        <Typography
+          variant="body2"
+          align="left"
+          sx={{ flexGrow: 1, fontSize: "small", color: "#a0a0a0", ml: "20px" }}
+        >
+          <span style={{ color: "black" }}>投稿: </span>
+          {dateToString(new Date())}
+          <span style={{ color: "black" }}>{" 最終更新: "}</span>
+          {dateToString(new Date())}
+        </Typography>
+      </Toolbar>
+      <Container
+        sx={{
+          overflowY: "hidden",
+          boxShadow: "0 0 4px gray",
+          mt: "10px"
+        }}
       >
-        {body}
-      </ReactMarkdown>
-    </div>
+        <Typography
+          component="h2"
+          variant="h4"
+          fontWeight="bold"
+          sx={{ pt: "10px", borderBottom: 1, borderColor: "gray" }}
+        >
+          {title}
+        </Typography>
+        <ReactMarkdown components={{ code: CodeBlock }}>{body}</ReactMarkdown>
+      </Container>
+    </Container>
   );
 };
 
