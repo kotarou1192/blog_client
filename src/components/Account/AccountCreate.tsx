@@ -2,7 +2,16 @@ import React, { useState } from "react";
 import * as network from "../../utils/network";
 import { useHistory } from "react-router-dom";
 import { AccountCreateReadme } from "./AccountCreateReadme";
-import "./AccountCreationForm.css";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import {
+  Avatar,
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography
+} from "@mui/material";
 
 type RequestParams = {
   value: {
@@ -20,8 +29,6 @@ export const AccountCreate: React.FC<{}> = () => {
   const history = useHistory();
   const query = network.useQuery();
 
-  // フロント側のバリデーションでエラーメッセージを追加したり色々
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
   // クエリからセッションIDを取り出す
   const sessionID = query.get("session_id");
   // アカウント作成が成功したら成功画面に切り替えてHOMEに飛ばすためのフラグ
@@ -33,36 +40,76 @@ export const AccountCreate: React.FC<{}> = () => {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [name, setName] = useState("");
 
+  const [errors, setErrors] = useState<{
+    nickname: boolean;
+    nErrorMessage: string;
+    password: boolean;
+    pErrorMessage: string;
+    cPassword: boolean;
+    cPErrorMessage: string;
+    invalidAccess: boolean;
+    serverError: boolean;
+    oldToken: boolean;
+  }>({
+    nickname: false,
+    nErrorMessage: "",
+    password: false,
+    pErrorMessage: "",
+    cPassword: false,
+    cPErrorMessage: "",
+    invalidAccess: false,
+    serverError: false,
+    oldToken: false
+  });
+
+  const [isTrue, setTrue] = useState(false);
+  console.log(isTrue);
+
   const handleSubmit = () => {
-    const errorMessageArray: string[] = [];
+    const errorsCopy = {
+      nickname: false,
+      nErrorMessage: "",
+      password: false,
+      pErrorMessage: "",
+      cPassword: false,
+      cPErrorMessage: "",
+      invalidAccess: false,
+      serverError: false,
+      oldToken: false
+    };
+    let failedAny = false;
     if (
       name === "" ||
-      name.length >= NameMaximumChars ||
+      name.length > NameMaximumChars ||
       !ValidNameRegExp.test(name)
     ) {
-      errorMessageArray.push(
-        "名前が空か、名前に使えない文字が含まれている、もしくは長すぎます。名前は30文字以内の半角英数字とハイフンで構成してください。"
-      );
+      errorsCopy.nickname = true;
+      errorsCopy.nErrorMessage = "invalid nickname.";
+      failedAny = true;
     }
     if (password != null && password.length < passwordMinumumChars) {
-      errorMessageArray.push(
-        "パスワードが短すぎます。6文字以上で構成してください。"
-      );
+      errorsCopy.password = true;
+      errorsCopy.pErrorMessage = "password is too short.";
+      failedAny = true;
     }
     if (
       password == null ||
       passwordConfirm == null ||
       password !== passwordConfirm
     ) {
-      errorMessageArray.push("パスワードが一致しません");
+      errorsCopy.cPassword = true;
+      errorsCopy.cPErrorMessage = "password confirmation is different.";
+      failedAny = true;
     }
     if (sessionID == null) {
-      errorMessageArray.push("不正なアクセスです。");
+      errorsCopy.invalidAccess = true;
+      failedAny = true;
     }
     // バリデーションに引っかかっていたらここでリターン
-    if (errorMessageArray.length > 0 || sessionID == null) {
-      setErrorMessages(errorMessageArray);
+    if (failedAny || sessionID == null) {
+      setErrors(errorsCopy);
       setSubmited(false);
+      setTrue(true);
       return;
     }
 
@@ -78,10 +125,16 @@ export const AccountCreate: React.FC<{}> = () => {
         }
       })
       .catch((err) => {
-        if (err.response.status === 500)
-          setErrorMessages(["サーバー側でエラーが発生しました。"]);
-        if (err.response.status === 400)
-          setErrorMessages(["メールの有効期限切れです。"]);
+        if (err.response.status === 500) {
+          const cpErrors = errors;
+          cpErrors.serverError = true;
+          setErrors(cpErrors);
+        }
+        if (err.response.status === 400) {
+          const cpErrors = errors;
+          cpErrors.oldToken = true;
+          setErrors(cpErrors);
+        }
         setSubmited(false);
       });
   };
@@ -97,75 +150,101 @@ export const AccountCreate: React.FC<{}> = () => {
   }
 
   return (
-    <div className="account_creation_base">
+    <Container maxWidth="xl" sx={{ backgroundColor: "#fafafa" }}>
       <AccountCreateReadme />
-      <div className="account_creation_form">
-        <span hidden={submited}>
-          <ErrorMessageList messages={errorMessages}></ErrorMessageList>
-        </span>
-        <div>
-          <p className="account_creation_form__nickname_text">
-            使用できる文字は半角英数字とハイフンのみです。
-          </p>
-          <input
-            className="account_creation_form__input_nickname"
-            type="text"
-            placeholder="ニックネーム"
-            onChange={(el) => setName(el.target.value)}
-            value={name}
-          ></input>
-        </div>
-        <div>
-          <p className="account_creation_form__password_text">
-            パスワードを決めてください。コピーやペーストはできません。
-          </p>
-          <input
-            className="account_creation_form__input_password"
-            type="password"
-            placeholder="password"
-            onChange={(el) => setPassword(el.target.value)}
-            value={password}
-          ></input>
-        </div>
-        <div>
-          <p className="account_creation_form__confirm_password_text">
-            確認のためもう一度パスワードを入力してください。
-          </p>
-          <input
-            className="account_creation_form__input_password_confirm"
-            type="password"
-            placeholder="確認"
-            onChange={(el) => setPasswordConfirm(el.target.value)}
-            value={passwordConfirm}
-          ></input>
-        </div>
-        <input
-          className="account_creation_form__submit"
-          type="submit"
-          value="同意して送信"
-          disabled={submited}
-          onClick={() => {
-            setSubmited(true);
-            handleSubmit();
+      <Container
+        component="main"
+        maxWidth="xs"
+        sx={{ backgroundColor: "#fafafa" }}
+      >
+        <Box
+          sx={{
+            marginTop: "10px",
+            display: "flex",
+            bgcolor: "white",
+            padding: "10px",
+            pr: "30px",
+            pl: "30px",
+            flexDirection: "column",
+            alignItems: "center"
           }}
-        ></input>
-      </div>
-    </div>
-  );
-};
-
-const ErrorMessageList: React.FC<{ messages: string[] }> = (props) => {
-  return (
-    <ul
-      className={
-        props.messages.length === 0 ? "hidden" : "account_creation__error_base"
-      }
-    >
-      {props.messages.map((message, index) => (
-        <li key={index} className="account_creation__error_text">
-          {message}
-        </li>
-      ))}
-    </ul>
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <Typography component="h1" variant="h5">
+            <p hidden={!errors.oldToken}>
+              メールの有効期限切れです。もう一度SignUpから登録ください。
+            </p>
+            <p hidden={!errors.invalidAccess}>
+              登録リンクが古いか、すでに使われた登録リンクです。
+            </p>
+            <p hidden={!errors.serverError}>
+              サーバーにエラーが起きています。暫く待つか、管理者にお問い合わせください。
+            </p>
+          </Typography>
+          <Box component="div" sx={{ mt: 3 }}>
+            <Grid container spacing={1}>
+              <Grid item xs={12}>
+                <p style={{ fontSize: "small", textAlign: "center" }}>
+                  使用できる文字は半角英数字とハイフンのみです。長さは1-30文字です。
+                </p>
+                <TextField
+                  fullWidth
+                  label="NickName"
+                  autoComplete="nickname"
+                  onChange={(el) => setName(el.target.value)}
+                  value={name}
+                  error={errors.nickname}
+                  helperText={errors.nErrorMessage}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <p style={{ fontSize: "small", textAlign: "center" }}>
+                  パスワードを決めてください。コピーやペーストはできません。
+                </p>
+                <TextField
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  autoComplete="new-password"
+                  onChange={(el) => setPassword(el.target.value)}
+                  value={password}
+                  error={errors.password}
+                  helperText={errors.pErrorMessage}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Confirm Password"
+                  type="password"
+                  autoComplete="confirm-password"
+                  onChange={(el) => setPasswordConfirm(el.target.value)}
+                  value={passwordConfirm}
+                  error={errors.cPassword}
+                  helperText={errors.cPErrorMessage}
+                />
+              </Grid>
+            </Grid>
+            <Button
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+              disabled={submited}
+              onClick={() => {
+                setSubmited(true);
+                handleSubmit();
+              }}
+            >
+              Accept and Sign Up
+            </Button>
+          </Box>
+        </Box>
+      </Container>
+    </Container>
   );
 };
