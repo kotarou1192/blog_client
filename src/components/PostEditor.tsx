@@ -113,7 +113,8 @@ const Preview: React.FC<{ title: string; body: string }> = ({
         sx={{
           overflowY: "hidden",
           boxShadow: "0 0 4px gray",
-          mt: "10px"
+          mt: "10px",
+          minHeight: "calc(100vh - 165px)"
         }}
       >
         <Typography
