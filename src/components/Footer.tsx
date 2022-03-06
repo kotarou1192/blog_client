@@ -68,11 +68,6 @@ export const Footer = () => {
                   </RLink>
                 </li>
                 <li style={listStyle}>
-                  <RLink to="/guide/terms" style={rLinkStyle}>
-                    利用規約
-                  </RLink>
-                </li>
-                <li style={listStyle}>
                   <RLink to="/guide/community-guideline" style={rLinkStyle}>
                     ガイドライン
                   </RLink>

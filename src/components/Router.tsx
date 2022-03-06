@@ -23,7 +23,7 @@ import {
 } from "@mui/material";
 import "./hideScrollbar.css";
 import { Footer } from "./Footer";
-import { About } from "./GuidAndHelp/";
+import { About, CommunityGuideline, Policy } from "./GuidAndHelp/";
 
 const theme = createTheme({
   components: {
@@ -94,14 +94,27 @@ export const Router: React.FC<{}> = () => {
             <Route path="/guide/about">
               <About />
             </Route>
-            <Route path="/guide/terms"></Route>
-            <Route path="/guide/community-guideline"></Route>
-            <Route path="/guide/privacy"></Route>
-            <Route path="/guide/feedback"></Route>
-            <Route path="/guide/help"></Route>
-            <Route path="/product/contact-me"></Route>
-            <Route path="/product/sources"></Route>
-            <Route path="/product/author"></Route>
+            <Route path="/guide/community-guideline">
+              <CommunityGuideline />
+            </Route>
+            <Route path="/guide/privacy">
+              <Policy />
+            </Route>
+            <Route path="/guide/feedback">
+              <NotFound />
+            </Route>
+            <Route path="/guide/help">
+              <NotFound />
+            </Route>
+            <Route path="/product/contact-me">
+              <NotFound />
+            </Route>
+            <Route path="/product/sources">
+              <NotFound />
+            </Route>
+            <Route path="/product/author">
+              <NotFound />
+            </Route>
             <Route>
               <NotFound></NotFound>
             </Route>
