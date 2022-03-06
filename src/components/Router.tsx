@@ -22,6 +22,8 @@ import {
   ThemeProvider
 } from "@mui/material";
 import "./hideScrollbar.css";
+import { Footer } from "./Footer";
+import { About, CommunityGuideline, Policy } from "./GuidAndHelp/";
 
 const theme = createTheme({
   components: {
@@ -48,7 +50,7 @@ export const Router: React.FC<{}> = () => {
       <CssBaseline />
       <div className="scrollbar__hide" style={{ backgroundColor: "#fafafa" }}>
         <Header keywords={keywords} setKeywords={setKeywords} />
-        <Container maxWidth="xl" sx={{ bgcolor: "white" }}>
+        <Container maxWidth="xl" sx={{ bgcolor: "white", minHeight: "87vh" }}>
           <Switch>
             <Route exact path="/">
               <Top />
@@ -89,11 +91,36 @@ export const Router: React.FC<{}> = () => {
             <Route path="/account/create">
               <AccountCreate></AccountCreate>
             </Route>
+            <Route path="/guide/about">
+              <About />
+            </Route>
+            <Route path="/guide/community-guideline">
+              <CommunityGuideline />
+            </Route>
+            <Route path="/guide/privacy">
+              <Policy />
+            </Route>
+            <Route path="/guide/feedback">
+              <NotFound />
+            </Route>
+            <Route path="/guide/help">
+              <NotFound />
+            </Route>
+            <Route path="/product/contact-me">
+              <NotFound />
+            </Route>
+            <Route path="/product/sources">
+              <NotFound />
+            </Route>
+            <Route path="/product/author">
+              <NotFound />
+            </Route>
             <Route>
               <NotFound></NotFound>
             </Route>
           </Switch>
         </Container>
+        <Footer />
       </div>
     </ThemeProvider>
   );
