@@ -64,7 +64,7 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
                 marginTop: "10px",
                 marginLeft: "8px",
                 color: "black",
-                fontSize: "15px",
+                fontSize: "18px",
                 fontWeight: "bold"
               }}
             >
