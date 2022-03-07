@@ -1,26 +1,44 @@
 import React, { useMemo } from "react";
 import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
-import { Link } from "react-router-dom";
+import { PostItemCard } from "./PostItemCard";
+import { Grid } from "@mui/material";
+import { SearchProps } from "../@types/global";
+import { UserCard } from "./UserCard";
+import { useQuery } from "../utils/network";
 
 type SearchResultsProps = {
-  results: any[];
-  keywords: string;
+  searchType: "users" | "posts";
+  results: any[] | undefined;
   setResults: any;
-  setKeywords: any;
+  keywords: string;
+  searchProps: SearchProps;
+  setSearchProps: any;
 };
-export const SearchResults: React.FC<SearchResultsProps> = (props) => {
-  const searchUsers = async () => {
-    await getWithAuthenticate("/search/users", {
-      keywords: props.keywords
+
+export const SearchResults: React.FC<SearchResultsProps> = ({
+  results,
+  setResults,
+  keywords,
+  searchProps,
+  searchType
+}) => {
+  const query = useQuery();
+  const page = Number(query.get("page")) || 1;
+  const search = () => {
+    getWithAuthenticate("/search/" + searchType, {
+      keywords: keywords,
+      order_type: searchProps.order_type,
+      page: page,
+      max_contents: searchProps.max_contents
     })
       .then((res) => {
-        props.setResults(res.data);
+        setResults(res.data);
       })
       .catch((e) => console.log(e));
   };
   const keywordSpliter = () => {
     const keys = new Map<string, boolean>();
-    return props.keywords
+    return keywords
       .split(/\s/)
       .map((key) => {
         if (keys.get(key) == null) {
@@ -31,24 +49,37 @@ export const SearchResults: React.FC<SearchResultsProps> = (props) => {
       .filter(Boolean);
   };
 
-  useMemo(searchUsers, [keywordSpliter().join("")]);
+  useMemo(search, [keywordSpliter().join(""), searchType, page]);
+
+  if (results == null || results === []) return <span></span>;
   return (
-    <ul>
-      {props.results.map((result, index) => (
-        <SearchResult key={index} name={result.name} />
+    <Grid
+      container
+      spacing={2}
+      sx={{ mt: "10px", mr: "10px", ml: "10px", mb: "10px" }}
+    >
+      {results.map((result, index) => (
+        <Grid item md={6} key={index}>
+          <ResultSwitcher result={result} isPost={searchType === "posts"} />
+        </Grid>
       ))}
-    </ul>
+    </Grid>
   );
 };
 
-type ResultData = {
-  name: string;
-};
-
-const SearchResult: React.FC<ResultData> = (props) => {
-  return (
-    <li>
-      <Link to={"/users/" + props.name}>UserName: {props.name}</Link>
-    </li>
-  );
+const ResultSwitcher: React.FC<{ isPost: boolean; result: any }> = ({
+  isPost,
+  result
+}) => {
+  if (isPost)
+    return (
+      <PostItemCard
+        userName={result.user_name}
+        postID={result.id}
+        title={result.title}
+        body={result.body}
+        created_at={result.created_at}
+      />
+    );
+  return <UserCard name={result.name} />;
 };

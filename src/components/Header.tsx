@@ -73,7 +73,7 @@ export const Header: React.FC<MenuBarProps> = (props) => {
             onKeyPress={(e) => {
               if (e.key !== "Enter") return;
               const keywords = keywordSpliter(props.keywords).join(" ");
-              history.push("/search/users?keywords=" + keywords);
+              history.push("/search?keywords=" + keywords + "&page=1");
             }}
           />
         </Search>

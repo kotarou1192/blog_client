@@ -4,8 +4,6 @@ import { LatestPosts } from "./LatestPosts";
 
 export const Top: React.FC<{}> = () => {
   const [latestPosts, setLatestPosts] = useState();
-  console.log("mounted");
-  console.log(latestPosts);
 
   return (
     <Box

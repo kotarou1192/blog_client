@@ -9,7 +9,7 @@ import { Login } from "./LoginContainer/Login";
 import { sitekey } from "../utils/Constants";
 import { UserPage } from "./UserPage/UserPage";
 import { MyPage } from "./MyPage";
-import { SearchResults } from "./SearchResults";
+import { SearchContainer } from "./SearchContainer";
 import { PostItem } from "./PostItem";
 import { CreatePost } from "./CreatePost";
 import { UpdatePost } from "./UpdatePost";
@@ -43,12 +43,14 @@ const theme = createTheme({
 export const Router: React.FC<{}> = () => {
   const query = network.useQuery();
   const [keywords, setKeywords] = useState<string>(query.get("keywords") || "");
-  const [results, setResults] = useState([]);
+  const [searchTarget, setSearchTarget] = useState<"posts" | "users">("posts");
+  const topRef = React.createRef<HTMLDivElement>();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <div className="scrollbar__hide" style={{ backgroundColor: "#fafafa" }}>
+        <div ref={topRef}></div>
         <Header keywords={keywords} setKeywords={setKeywords} />
         <Container maxWidth="xl" sx={{ bgcolor: "white", minHeight: "87vh" }}>
           <Switch>
@@ -73,12 +75,13 @@ export const Router: React.FC<{}> = () => {
               component={UpdatePost}
             ></Route>
             <Route path="/users/:name/posts/:id" component={PostItem}></Route>
-            <Route path="/search/users">
-              <SearchResults
-                results={results}
+            <Route path="/search">
+              <SearchContainer
                 keywords={keywords}
-                setResults={setResults}
                 setKeywords={setKeywords}
+                searchTarget={searchTarget}
+                setSearchTarget={setSearchTarget}
+                topRef={topRef}
               />
             </Route>
             <Route path="/account/want_to_create">
