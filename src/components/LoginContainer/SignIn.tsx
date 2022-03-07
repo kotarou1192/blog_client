@@ -15,7 +15,7 @@ import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useCallback, useEffect, useState } from "react";
 import { login, rememberLogin } from "../../utils/network/AxiosWrapper";
 import { useQuery } from "../../utils/network/QueryStringGetter";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link as RLink } from "react-router-dom";
 
 function Copyright(props: any) {
   return (
@@ -175,14 +175,17 @@ const SignInField: React.FC<SignInFieldProps> = (props) => {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/404" variant="body2">
+                <RLink to="/404" style={{ fontSize: "small" }}>
                   Forgot password?
-                </Link>
+                </RLink>
               </Grid>
               <Grid item>
-                <Link href="/account/want_to_create" variant="body2">
+                <RLink
+                  to="/account/want_to_create"
+                  style={{ fontSize: "small" }}
+                >
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </RLink>
               </Grid>
             </Grid>
           </Box>

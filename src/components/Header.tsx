@@ -1,7 +1,7 @@
 import * as React from "react";
 import Toolbar from "@mui/material/Toolbar";
 import SearchIcon from "@mui/icons-material/Search";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import InputBase from "@mui/material/InputBase";
 import { styled, alpha } from "@mui/material/styles";
 import { ButtonGroup, Button, Typography } from "@mui/material";
@@ -50,7 +50,7 @@ export const Header: React.FC<MenuBarProps> = (props) => {
             flex: 1
           }}
         >
-          <Link href="/" align="center">
+          <Link to="/" style={{ textAlign: "center" }}>
             <img
               src={headerLogoURL}
               style={{
