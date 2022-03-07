@@ -7,7 +7,6 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import React from "react";
-import "./Readme.css";
 
 export const AccountCreateReadme: React.FC<{}> = () => {
   return (

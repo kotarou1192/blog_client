@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import { deleteWithAuthenticate } from "../utils/network/AxiosWrapper";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
@@ -15,7 +15,6 @@ import {
   Button,
   Dialog,
   DialogTitle,
-  Link,
   DialogContent,
   Typography,
   DialogContentText,
@@ -76,9 +75,7 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
   return (
     <Container disableGutters fixed sx={{ width: "100hv" }}>
       <Toolbar sx={{ borderBottom: 1, width: "100hv", borderColor: "divider" }}>
-        <Link href={"/users/" + name} underline="hover">
-          @{name}
-        </Link>
+        <Link to={"/users/" + name}>@{name}</Link>
         <Typography
           variant="body2"
           align="left"

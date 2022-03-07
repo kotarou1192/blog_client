@@ -4,7 +4,6 @@ import {
   Button,
   Box,
   ListItem,
-  Link,
   List,
   ListItemText,
   Typography
@@ -13,6 +12,7 @@ import React from "react";
 import { useGetAPI } from "../../utils/useAPI";
 import { NotFound } from "../NotFound";
 import "../hideScrollbar.css";
+import { Link as RLink } from "react-router-dom";
 
 type PostsProps = {
   name: string;
@@ -57,19 +57,19 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
             </Typography>
           }
           secondary={
-            <Link
-              underline="hover"
-              variant="h6"
-              href={`/users/${name}/posts/${post.id}`}
-              sx={{
-                mt: "10px",
-                ml: "8px",
+            <RLink
+              to={`/users/${name}/posts/${post.id}`}
+              style={{
+                textDecoration: "none",
+                marginTop: "10px",
+                marginLeft: "8px",
                 color: "black",
+                fontSize: "15px",
                 fontWeight: "bold"
               }}
             >
               {post.title}
-            </Link>
+            </RLink>
           }
         ></ListItemText>
       </ListItem>

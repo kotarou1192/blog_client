@@ -30,12 +30,12 @@ export const Footer = () => {
       <Grid container pr="20px" pl="20px">
         <Grid item md={4}>
           <Container maxWidth="lg">
-            <Link href="/">
+            <RLink to="/">
               <img
                 src={headerLogoURL}
                 style={{ width: "480px", height: "240px" }}
               />
-            </Link>
+            </RLink>
             <Copyright />
           </Container>
         </Grid>
