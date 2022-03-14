@@ -64,11 +64,7 @@ export const User: React.FC<{ data: UserProps }> = (props) => {
       </Grid>
       <CardMedia
         component="img"
-<<<<<<< HEAD
         image={icon ? CDN_URL + "/" + icon : smileReo}
-=======
-        image={icon !== "" ? CDN_URL + "/" + icon : smileReo}
->>>>>>> 00f627760fed0b50f0f6d2970b91ee64aa22eb60
         sx={{
           width: 140,
           margin: "0 auto"
@@ -84,11 +80,7 @@ export const User: React.FC<{ data: UserProps }> = (props) => {
           borderColor: "divider"
         }}
       >
-<<<<<<< HEAD
         {explanation ? explanation : "自己紹介はありません"}
-=======
-        {explanation == null ? "自己紹介はありません" : explanation}
->>>>>>> 00f627760fed0b50f0f6d2970b91ee64aa22eb60
       </Typography>
     </Card>
   );
@@ -173,15 +165,9 @@ const EditWindowButton: React.FC<{
           <CardMedia
             component="img"
             image={
-<<<<<<< HEAD
               iconImg
                 ? window.URL.createObjectURL(iconImg)
                 : icon
-=======
-              iconImg != null
-                ? window.URL.createObjectURL(iconImg)
-                : icon != null
->>>>>>> 00f627760fed0b50f0f6d2970b91ee64aa22eb60
                 ? CDN_URL + "/" + icon
                 : smileReo
             }
