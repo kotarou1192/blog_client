@@ -108,9 +108,13 @@ export const Footer = () => {
                   </RLink>
                 </li>
                 <li style={listStyle}>
-                  <RLink to="/product/sources" style={rLinkStyle}>
+                  <Link
+                    href="https://github.com/kotarou1192/my-information/tree/main/blog-md"
+                    target="_blank"
+                    style={rLinkStyle}
+                  >
                     Sources
-                  </RLink>
+                  </Link>
                 </li>
                 <li style={listStyle}>
                   <RLink to="/product/author" style={rLinkStyle}>
