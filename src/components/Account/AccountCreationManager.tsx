@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { useHistory } from "react-router-dom";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { BaseURL } from "../../utils/network/Constants";
 
 type AccountCreationManagerProps = {
   creationFailed: boolean;
@@ -56,7 +57,7 @@ export const AccountCreationManager: React.FC<AccountCreationManagerProps> = (
 const AccountCreation: React.FC<
   AccountCreationProps & AccountCreationManagerProps
 > = (props) => {
-  const url = "https://api.takashiii-hq.com/account/want_to_create";
+  const url = BaseURL + "/account/want_to_create";
   const [email, setEmail] = useState<string>("");
   const [disabled, setDisabled] = useState<boolean>(false);
   const [success, setSuccess] = useState<boolean>(false);
