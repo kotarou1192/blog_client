@@ -75,11 +75,18 @@ const ResultSwitcher: React.FC<{ isPost: boolean; result: any }> = ({
     return (
       <PostItemCard
         userName={result.user_name}
+        avatarURL={result.user_avatar}
         postID={result.id}
         title={result.title}
         body={result.body}
         created_at={result.created_at}
       />
     );
-  return <UserCard name={result.name} />;
+  return (
+    <UserCard
+      name={result.name}
+      avatar={result.icon}
+      explanation={result.explanation}
+    />
+  );
 };

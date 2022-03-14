@@ -33,6 +33,7 @@ export const LatestPosts: React.FC<SearchResultsProps> = ({
           <Grid item md={6} key={index}>
             <PostItemCard
               userName={latestPost.user_name}
+              avatarURL={latestPost.user_avatar}
               postID={latestPost.id}
               title={latestPost.title}
               body={latestPost.body}
