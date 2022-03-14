@@ -1,26 +1,22 @@
 import { Grid } from "@mui/material";
 import React from "react";
+import { UserProps } from "../../@types/global";
 import { useGetAPI } from "../../utils/useAPI";
 import { NotFound } from "../NotFound";
 import { Info } from "./Info";
 import { Posts } from "./Post";
 import { User } from "./User";
 
-type UserProps = {
+type UserPageProps = {
   match: {
-    params: UserParams;
+    params: UserProps;
   };
 };
 
-type UserParams = {
-  name: string;
-  is_my_page: boolean;
-};
-
-export const UserPage: React.FC<UserProps> = (props) => {
+export const UserPage: React.FC<UserPageProps> = (props) => {
   const name = props.match.params.name;
 
-  const userData: 404 | undefined | UserParams = useGetAPI("/users/" + name);
+  const userData: 404 | undefined | UserProps = useGetAPI("/users/" + name);
 
   if (!userData) return <div></div>;
   if (userData === 404) return <NotFound></NotFound>;
