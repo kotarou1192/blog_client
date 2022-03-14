@@ -200,9 +200,8 @@ const EditWindowButton: React.FC<{
             startIcon={<SaveIcon />}
             onClick={async () => {
               const file = fileRef?.current?.files?.item(0) as Blob | undefined;
-              if (file == null) return;
               const formData = new FormData();
-              formData.append("icon", file);
+              if (file != null) formData.append("icon", file);
               formData.append("explanation", exp);
               putWithAuthenticate("/users/" + name, formData).then(() => {
                 console.log("success");
