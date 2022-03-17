@@ -63,8 +63,8 @@ export const Top: React.FC<{}> = () => {
           width: "180px",
           borderBottom: "none",
           position: "absolute",
-          left: 80,
-          bottom: 30,
+          left: 30,
+          top: 200,
           borderRadius: "15px",
           bgcolor: alpha("#0096ff", 0.5)
         }}
