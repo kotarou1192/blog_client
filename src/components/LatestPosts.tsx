@@ -6,16 +6,20 @@ import { Grid } from "@mui/material";
 type SearchResultsProps = {
   latestPosts: any[] | undefined;
   setLatestPosts: any;
+  targetCategory: { id: number; name: string };
 };
 
 export const LatestPosts: React.FC<SearchResultsProps> = ({
   latestPosts,
-  setLatestPosts
+  setLatestPosts,
+  targetCategory
 }) => {
   const searchPosts = async () => {
     await getWithAuthenticate("/search/posts", {
       keywords: "_",
-      order_type: "new"
+      order_type: "new",
+      category_scope: "base",
+      category_ids: targetCategory.id === 0 ? "" : targetCategory.id
     })
       .then((res) => {
         setLatestPosts(res.data);
@@ -23,7 +27,7 @@ export const LatestPosts: React.FC<SearchResultsProps> = ({
       .catch((e) => console.log(e));
   };
 
-  useMemo(searchPosts, []);
+  useMemo(searchPosts, [targetCategory.id, latestPosts?.length]);
   return (
     <Grid container spacing={2} sx={{ mt: "10px" }}>
       {latestPosts == null ? (
