@@ -1,9 +1,51 @@
-import { Card, Grid, CardContent, Typography, Box } from "@mui/material";
+import {
+  Card,
+  Grid,
+  CardContent,
+  Typography,
+  Box,
+  Select,
+  MenuItem,
+  alpha
+} from "@mui/material";
 import React, { useState } from "react";
+import { useGetAPI } from "../utils/useAPI";
 import { LatestPosts } from "./LatestPosts";
 
 export const Top: React.FC<{}> = () => {
   const [latestPosts, setLatestPosts] = useState();
+  const categories = useGetAPI("/categories") as
+    | { [key: string]: any }
+    | undefined;
+  const [currentCategory, setCurrentCategory] = useState<{
+    name: string;
+    id: number;
+  }>({ name: "すべてのカテゴリ", id: 0 });
+
+  console.log(currentCategory);
+
+  const handleChange = (elem: any) => {
+    if (categories == null) return;
+    Object.keys(categories).forEach((name, index) => {
+      const categoryID = elem.target.value as number;
+      if (categoryID === 0)
+        return setCurrentCategory({ name: "すべてのカテゴリ", id: 0 });
+      if (index + 1 !== categoryID) return;
+      setCurrentCategory({ name: name, id: categoryID });
+    });
+  };
+
+  const baseCategories = () => {
+    if (categories == null) return <span></span>;
+    return Object.keys(categories).map((name, index) => {
+      const categoryID = categories[name].category_id;
+      return (
+        <MenuItem key={index} value={categoryID}>
+          {name}
+        </MenuItem>
+      );
+    });
+  };
 
   return (
     <Box
@@ -15,6 +57,23 @@ export const Top: React.FC<{}> = () => {
         height: "100%"
       }}
     >
+      <Select
+        value={currentCategory.id}
+        defaultValue={0}
+        onChange={handleChange}
+        sx={{
+          width: "180px",
+          borderBottom: "none",
+          position: "absolute",
+          right: 16,
+          top: 130,
+          borderRadius: "15px",
+          bgcolor: alpha("#0096ff", 0.5)
+        }}
+      >
+        <MenuItem value={0}>すべてのカテゴリ</MenuItem>
+        {baseCategories()}
+      </Select>
       <Card
         sx={{
           width: "75%",
