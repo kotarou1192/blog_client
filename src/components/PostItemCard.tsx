@@ -3,13 +3,16 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
-import { Avatar, CardContent } from "@mui/material";
+import { Avatar, CardContent, Chip, Box } from "@mui/material";
 import { CDN_URL } from "../utils/network/Constants";
+import { Category } from "../@types/global";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 type postItemCardProps = {
   title: string;
   body: string;
   avatarURL?: string;
+  categories: Category[];
   userName: string;
   postID: number;
   created_at: number;
@@ -20,6 +23,7 @@ export const PostItemCard: React.FC<postItemCardProps> = ({
   title,
   avatarURL,
   body,
+  categories,
   userName,
   created_at
 }) => {
@@ -40,42 +44,86 @@ export const PostItemCard: React.FC<postItemCardProps> = ({
     );
   };
 
+  const genTags = () => {
+    return categories.map((category) => {
+      return (
+        <Link
+          key={category.value.id}
+          to={
+            "/search/posts?category_scope=sub&category_ids=" + category.value.id
+          }
+          style={{ textDecoration: "none", height: "30px", marginRight: "3px" }}
+        >
+          <Chip
+            size="small"
+            icon={<LocalOfferIcon fontSize="small" />}
+            onClick={() => {}}
+            label={category.value.sub_category_name}
+          />
+        </Link>
+      );
+    });
+  };
+
+  const CARD_BASE_HEIGHT = 280;
+
+  const tags = genTags();
+
   return (
-    <Card sx={{ height: "200px" }}>
+    <Card sx={{ height: CARD_BASE_HEIGHT + "px" }}>
       <CardHeader
         avatar={genAvatar()}
         title={<Link to={"/users/" + userName}>{"@" + userName}</Link>}
         subheader={dateToString(writtenDate)}
-        sx={{ pb: "2px" }}
+        sx={{ pb: "2px", height: "60px" }}
       />
-      <Link
-        to={"/users/" + userName + "/posts/" + postID}
-        style={{
-          textDecoration: "none"
+      <CardContent
+        sx={{
+          pt: "3px"
         }}
       >
-        <CardContent sx={{ pt: "3px" }}>
-          <Typography
-            mb="3px"
-            sx={{
-              marginTop: "10px",
-              color: "black",
-              fontSize: "18px",
-              fontWeight: "bold"
+        <div style={{ height: "100px", overflowY: "hidden" }}>
+          <Link
+            to={"/users/" + userName + "/posts/" + postID}
+            style={{
+              textDecoration: "none"
             }}
           >
-            {title}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            fontSize="small"
-            sx={{ overflowX: "hidden" }}
-          >
-            {symbolRemoved(body)}
-          </Typography>
-        </CardContent>
-      </Link>
+            <Typography
+              mb="3px"
+              sx={{
+                marginTop: "10px",
+                color: "black",
+                fontSize: "18px",
+                fontWeight: "bold"
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              fontSize="small"
+              sx={{ overflowX: "hidden" }}
+            >
+              {symbolRemoved(body)}
+            </Typography>
+          </Link>
+        </div>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            borderTop: 1,
+            borderColor: "divider",
+            pt: "5px",
+            pl: "5px",
+            pr: "5px"
+          }}
+        >
+          {tags}
+        </Box>
+      </CardContent>
     </Card>
   );
 };

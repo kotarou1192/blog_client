@@ -84,6 +84,7 @@ const ResultSwitcher: React.FC<{ isPost: boolean; result: any }> = ({
         title={result.title}
         body={result.body}
         created_at={result.created_at}
+        categories={result.categories}
       />
     );
   return (

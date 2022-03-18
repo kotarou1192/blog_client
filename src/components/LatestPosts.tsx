@@ -40,6 +40,7 @@ export const LatestPosts: React.FC<SearchResultsProps> = ({
               avatarURL={latestPost.user_avatar}
               postID={latestPost.id}
               title={latestPost.title}
+              categories={latestPost.categories}
               body={latestPost.body}
               created_at={latestPost.created_at}
             />

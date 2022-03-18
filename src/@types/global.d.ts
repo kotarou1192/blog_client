@@ -10,3 +10,12 @@ export type UserProps = {
   icon?: string;
   is_my_page: boolean;
 };
+
+export type Category = {
+  tag_id: number;
+  value: {
+    id: number;
+    base_category_name: string;
+    sub_category_name: string;
+  };
+};
