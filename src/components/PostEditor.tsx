@@ -85,7 +85,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
 
   // console.log("####");
   // console.log(categories);
-  // console.log(props.post.user_avatar);
+  // console.log(selectedIDs);
   // console.log("####");
 
   useMemo(() => {
@@ -444,6 +444,7 @@ const CategoriesSelector: React.FC<{
   };
 
   const removeCategoryFromID = (sel: number) => {
+    onChange(selectedIDs.filter((id) => id !== sel));
     setSelectedIDs(selectedIDs.filter((id) => id !== sel));
   };
 
