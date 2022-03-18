@@ -2,8 +2,9 @@ import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { deleteWithAuthenticate } from "../utils/network/AxiosWrapper";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import "./Markdown.css";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {
   CodeComponent,
   ReactMarkdownNames
@@ -121,7 +122,10 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
         >
           {postItem.title}
         </Typography>
-        <ReactMarkdown components={{ code: CodeBlock }}>
+        <ReactMarkdown
+          components={{ code: CodeBlock }}
+          remarkPlugins={[remarkGfm]}
+        >
           {postItem.body}
         </ReactMarkdown>
       </Container>
@@ -197,12 +201,7 @@ const CodeBlock: CodeComponent | ReactMarkdownNames = ({
 }: any) => {
   const match = /language-(\w+)/.exec(className || "");
   return !inline && match ? (
-    <SyntaxHighlighter
-      style={darcula}
-      language={match[1]}
-      PreTag="div"
-      {...props}
-    >
+    <SyntaxHighlighter language={match[1]} PreTag="div" {...props}>
       {String(children).replace(/\n$/, "")}
     </SyntaxHighlighter>
   ) : (

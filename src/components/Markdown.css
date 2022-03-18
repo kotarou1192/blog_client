@@ -1,0 +1,25 @@
+tr {
+  border-top: 1px solid #c6cbd1;
+  background: #fff;
+}
+
+th,
+td {
+  padding: 6px 13px;
+  border: 1px solid #dfe2e5;
+}
+
+table tr:nth-child(2n) {
+  background: #f6f8fa;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+blockquote {
+  padding: 0 1em;
+  margin: 0;
+  color: #6a737d;
+  border-left: 0.25em solid #dfe2e5;
+}

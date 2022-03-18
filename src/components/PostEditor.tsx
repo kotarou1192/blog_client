@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   CodeComponent,
   ReactMarkdownNames
@@ -9,7 +9,10 @@ import { getUserName } from "../utils/CookiesWrapper";
 import { AxiosResponse } from "axios";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
-import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import remarkGfm from "remark-gfm";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import "./Markdown.css";
 import {
   Toolbar,
   TextField,
@@ -17,9 +20,15 @@ import {
   Link,
   Button,
   Container,
-  TextareaAutosize
+  TextareaAutosize,
+  Select,
+  Box,
+  Chip,
+  MenuItem,
+  OutlinedInput
 } from "@mui/material";
 import "./hideScrollbar.css";
+import { useGetAPI } from "../utils/useAPI";
 
 type PostEdirotProps = {
   post: {
@@ -32,10 +41,43 @@ type PostEdirotProps = {
   setDisabled: any;
 };
 
+type SubCategory = {
+  id: number;
+  base_category_name: string;
+  sub_category_name: string;
+};
+
 export const PostEditor: React.FC<PostEdirotProps> = (props) => {
   const [isPreview, setPreview] = useState(false);
+  const [categories, setCategories] = useState<SubCategory[]>([]);
   const history = useHistory();
   const name = getUserName();
+  const allCategories = useGetAPI("/categories");
+  const [selectedIDs, setSelectedIDs] = useState<number[]>([]);
+  const [allSubCategories, setAllSubCategories] = useState<SubCategory[]>([]);
+  const [currentBaseCategoryName, setCurrentBaseCategoryName] =
+    useState<string>("");
+
+  useMemo(() => {
+    let result: SubCategory[] = [];
+    Object.keys(allCategories == null ? {} : allCategories).forEach(
+      (baseName) => {
+        result = result.concat(allCategories[baseName].sub_categories);
+      }
+    );
+    setAllSubCategories(result);
+  }, [Object.keys(allCategories == null ? {} : allCategories).length]);
+
+  useEffect(() => {
+    const filteredSubCategories = allSubCategories.filter((subCategory) =>
+      selectedIDs.some((id) => subCategory.id === id)
+    );
+    setCategories(filteredSubCategories);
+  }, [
+    Object.keys(allCategories == null ? {} : allCategories).length,
+    categories.length,
+    selectedIDs.length
+  ]);
 
   const buttonDisableWhenRequest = () => {
     props.setDisabled(true);
@@ -74,7 +116,16 @@ export const PostEditor: React.FC<PostEdirotProps> = (props) => {
       {isPreview ? (
         <Preview title={props.post.title} body={props.post.body} />
       ) : (
-        <Editor post={props.post} setPost={props.setPost} />
+        <Editor
+          currentBaseCategoryName={currentBaseCategoryName}
+          setCurrentBaseCategoryName={setCurrentBaseCategoryName}
+          selectedIDs={selectedIDs}
+          setSelectedIDs={setSelectedIDs}
+          allSubCategories={allSubCategories}
+          allCategories={allCategories}
+          post={props.post}
+          setPost={props.setPost}
+        />
       )}
     </Container>
   );
@@ -125,19 +176,42 @@ const Preview: React.FC<{ title: string; body: string }> = ({
         >
           {title}
         </Typography>
-        <ReactMarkdown components={{ code: CodeBlock }}>{body}</ReactMarkdown>
+        <div>
+          <ReactMarkdown
+            components={{ code: CodeBlock }}
+            remarkPlugins={[remarkGfm]}
+            rehypePlugins={[rehypeKatex]}
+          >
+            {body}
+          </ReactMarkdown>
+        </div>
       </Container>
     </Container>
   );
 };
 
 const Editor: React.FC<{
+  currentBaseCategoryName: string;
+  setCurrentBaseCategoryName: any;
+  allCategories: any;
+  allSubCategories: SubCategory[];
+  selectedIDs: number[];
+  setSelectedIDs: any;
   post: {
     title: string;
     body: string;
   };
   setPost: any;
 }> = (props) => {
+  const {
+    allCategories,
+    allSubCategories,
+    selectedIDs,
+    setSelectedIDs,
+    currentBaseCategoryName,
+    setCurrentBaseCategoryName
+  } = props;
+
   return (
     <Container maxWidth="lg">
       <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -152,6 +226,14 @@ const Editor: React.FC<{
           }
         />
       </Toolbar>
+      <CategoriesSelector
+        selectedIDs={selectedIDs}
+        setSelectedIDs={setSelectedIDs}
+        allSubCategories={allSubCategories}
+        allCategories={allCategories}
+        currentBaseCategoryName={currentBaseCategoryName}
+        setCurrentBaseCategoryName={setCurrentBaseCategoryName}
+      />
       <TextareaAutosize
         className="scrollbar__hide"
         value={props.post.body}
@@ -180,17 +262,113 @@ const CodeBlock: CodeComponent | ReactMarkdownNames = ({
 }: any) => {
   const match = /language-(\w+)/.exec(className || "");
   return !inline && match ? (
-    <SyntaxHighlighter
-      style={darcula}
-      language={match[1]}
-      PreTag="div"
-      {...props}
-    >
+    <SyntaxHighlighter language={match[1]} PreTag="div" {...props}>
       {String(children).replace(/\n$/, "")}
     </SyntaxHighlighter>
   ) : (
     <code className={className} {...props}>
       {children}
     </code>
+  );
+};
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  }
+};
+
+const CategoriesSelector: React.FC<{
+  selectedIDs: number[];
+  allSubCategories: SubCategory[];
+  currentBaseCategoryName: string;
+  setCurrentBaseCategoryName: any;
+  allCategories: any;
+  setSelectedIDs: any;
+}> = ({
+  selectedIDs,
+  setSelectedIDs,
+  allCategories,
+  allSubCategories,
+  currentBaseCategoryName,
+  setCurrentBaseCategoryName
+}) => {
+  const handleChange = (elem: any) => {
+    if (allCategories == null) return;
+    Object.keys(allCategories).forEach((name, index) => {
+      const categoryID = elem.target.value as number;
+      if (index + 1 !== categoryID) return;
+      setCurrentBaseCategoryName(name);
+    });
+  };
+
+  const handleChooseCategories = (elem: any) => {
+    if (allCategories == null || currentBaseCategoryName === "") return;
+    const selectedSubCategoryIDs = elem.target.value as number[];
+    setSelectedIDs(selectedSubCategoryIDs);
+  };
+
+  const baseCategories = () => {
+    if (allCategories == null) return <span></span>;
+    return Object.keys(allCategories).map((name) => {
+      const categoryID = allCategories[name].category_id;
+      return (
+        <MenuItem key={categoryID} value={categoryID}>
+          {name}
+        </MenuItem>
+      );
+    });
+  };
+
+  const subCategories = () => {
+    if (allCategories == null || currentBaseCategoryName === "")
+      return <span></span>;
+    const childSubCategories = allCategories[currentBaseCategoryName]
+      .sub_categories as SubCategory[];
+    return childSubCategories.map((subCategory) => {
+      const { sub_category_name, id } = subCategory;
+      return (
+        <MenuItem key={id} value={id}>
+          {sub_category_name}
+        </MenuItem>
+      );
+    });
+  };
+
+  return (
+    <Toolbar>
+      <Select defaultValue="" onChange={handleChange}>
+        {baseCategories()}
+      </Select>
+      <Select
+        multiple
+        value={selectedIDs}
+        input={<OutlinedInput />}
+        renderValue={(selected) => {
+          const filteredSubCategories = allSubCategories.filter((subCategory) =>
+            selected.some((id) => subCategory.id === id)
+          );
+          return (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {filteredSubCategories.map((subCategory) => (
+                <Chip
+                  key={subCategory.id}
+                  label={subCategory.sub_category_name}
+                />
+              ))}
+            </Box>
+          );
+        }}
+        onChange={handleChooseCategories}
+        MenuProps={MenuProps}
+      >
+        {subCategories()}
+      </Select>
+    </Toolbar>
   );
 };
