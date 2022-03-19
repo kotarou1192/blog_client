@@ -14,11 +14,11 @@ export const Info = () => {
       <Link
         underline="hover"
         color="yellow"
-        href="https://commonmark.org/help/"
+        href="https://github.github.com/gfm/"
         target="_blank"
         rel="noreferrer"
       >
-        このブログで使えるmarkdownの記法
+        このブログで使えるmarkdownの記法（GFMに対応しました）
       </Link>
     </Card>
   );

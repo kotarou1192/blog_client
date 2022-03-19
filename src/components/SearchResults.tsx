@@ -24,12 +24,16 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
 }) => {
   const query = useQuery();
   const page = Number(query.get("page")) || 1;
+  const categoryScope = query.get("category_scope") || "";
+  const categoryIDs = query.get("category_ids") || "";
   const search = () => {
     getWithAuthenticate("/search/" + searchType, {
       keywords: keywords,
       order_type: searchProps.order_type,
       page: page,
-      max_contents: searchProps.max_contents
+      max_contents: searchProps.max_contents,
+      category_scope: categoryScope,
+      category_ids: categoryIDs
     })
       .then((res) => {
         setResults(res.data);
@@ -80,6 +84,7 @@ const ResultSwitcher: React.FC<{ isPost: boolean; result: any }> = ({
         title={result.title}
         body={result.body}
         created_at={result.created_at}
+        categories={result.categories}
       />
     );
   return (

@@ -1,18 +1,12 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
-import {
-  Button,
-  Box,
-  ListItem,
-  List,
-  ListItemText,
-  Typography
-} from "@mui/material";
+import { Button, Grid } from "@mui/material";
 import React from "react";
 import { useGetAPI } from "../../utils/useAPI";
 import { NotFound } from "../NotFound";
 import "../hideScrollbar.css";
 import { Link as RLink } from "react-router-dom";
+import { SmallPostItemCard } from "../SmallPostItemCard";
 
 type PostsProps = {
   name: string;
@@ -21,11 +15,6 @@ type PostsProps = {
 
 export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   const name = props.data.name;
-  const dateToString = (date: Date) => {
-    return `${date.getFullYear()}年${
-      date.getMonth() + 1
-    }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
-  };
 
   const links: 404 | undefined | any[] = useGetAPI(
     "/users/" + name + "/" + "posts" //selected
@@ -35,63 +24,41 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
   if (links === 404) return <NotFound />;
 
   const linkComponents = links.map((post: any, index) => {
-    const date = new Date(post.created_at * 1000);
     return (
-      <ListItem key={index} alignItems="flex-start">
-        <ListItemText
-          sx={{
-            height: "80px",
-            overflowX: "hidden",
-            boxShadow: "0px 0px 1px 0px gray"
-          }}
-          primary={
-            <Typography
-              sx={{
-                mt: "5px",
-                ml: "8px",
-                color: "gray",
-                fontSize: "small"
-              }}
-            >
-              {dateToString(date) + "に投稿"}
-            </Typography>
-          }
-          secondary={
-            <RLink
-              to={`/users/${name}/posts/${post.id}`}
-              style={{
-                textDecoration: "none",
-                marginTop: "10px",
-                marginLeft: "8px",
-                color: "black",
-                fontSize: "18px",
-                fontWeight: "bold"
-              }}
-            >
-              {post.title}
-            </RLink>
-          }
-        ></ListItemText>
-      </ListItem>
+      <SmallPostItemCard
+        key={index}
+        userName={post.user_name}
+        avatarURL={post.user_avatar}
+        postID={post.id}
+        title={post.title}
+        categories={post.categories}
+        body={post.body}
+        created_at={post.created_at}
+      />
     );
   });
 
   return (
-    <Box sx={{ textAlign: "center" }}>
+    <div style={{ height: "70vh" }}>
       {props.data.is_my_page ? (
-        <Button
-          startIcon={<FontAwesomeIcon icon={faPen} />}
-          variant="outlined"
-          href={"/users/" + name + "/posts/new"}
-          sx={{ mt: "5px", mb: "5px" }}
-        >
-          新規投稿
-        </Button>
+        <div style={{ textAlign: "center", height: "10vh" }}>
+          <RLink to={"/users/" + name + "/posts/new"}>
+            <Button
+              startIcon={<FontAwesomeIcon icon={faPen} />}
+              component="span"
+              variant="outlined"
+              sx={{ mt: "5px", mb: "5px" }}
+            >
+              新規投稿
+            </Button>
+          </RLink>
+        </div>
       ) : (
-        <div></div>
+        <div style={{ height: "10vh" }}></div>
       )}
-      <List
-        className="scrollbar__hide"
+      <Grid
+        container
+        spacing={2}
         sx={{
           overflowY: "scroll",
           mr: "2px",
@@ -99,11 +66,11 @@ export const Posts: React.FC<{ data: PostsProps }> = (props) => {
           scrollbarWidth: "none",
           border: "inherit 1",
           boxShadow: "0px 0px 1px 0px gray",
-          height: "540px"
+          height: "60vh"
         }}
       >
         {linkComponents}
-      </List>
-    </Box>
+      </Grid>
+    </div>
   );
 };
