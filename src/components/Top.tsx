@@ -92,6 +92,12 @@ export const Top: React.FC<{}> = () => {
           <Typography variant="body2">
             2022.3.7 トップページのデザインを更新しました
           </Typography>
+          <Typography variant="body2">
+            2022.3.19 markdownの形式であるGFMに対応しました
+          </Typography>
+          <Typography variant="body2">
+            2022.3.19 タグが使用できるようになりました
+          </Typography>
         </CardContent>
       </Card>
       <Grid container marginRight="auto" marginLeft="auto">
