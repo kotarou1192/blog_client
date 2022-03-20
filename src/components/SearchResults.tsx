@@ -53,7 +53,25 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       .filter(Boolean);
   };
 
-  useMemo(search, [keywordSpliter().join(""), searchType, page]);
+  const countAllCategoryIDs = () => {
+    return categoryIDs.split(/\s/).length;
+  };
+
+  const sumAllCategoryIDs = () => {
+    if (categoryIDs === "") return 0;
+    return categoryIDs
+      .split(/\s/)
+      .map((idStr) => Number(idStr))
+      .reduce((acc, id) => acc + id);
+  };
+
+  useMemo(search, [
+    keywordSpliter().join(""),
+    searchType,
+    page,
+    countAllCategoryIDs(),
+    sumAllCategoryIDs()
+  ]);
 
   if (results == null || results === []) return <span></span>;
   return (
