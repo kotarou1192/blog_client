@@ -304,7 +304,7 @@ const Editor: React.FC<{
               !(
                 postTitleIsValid(el.target.value) &&
                 postBodyIsValid(props.post.body) &&
-                postTagsCountIsValid(props.selectedIDs)
+                postTagsCountIsValid(selectedIDs)
               )
             );
             props.setPost({
@@ -343,8 +343,8 @@ const Editor: React.FC<{
           props.setDisabled(
             !(
               postBodyIsValid(el.target.value) &&
-              postTitleIsValid(props.post.body) &&
-              postTagsCountIsValid(props.selectedIDs)
+              postTitleIsValid(props.post.title) &&
+              postTagsCountIsValid(selectedIDs)
             )
           );
           props.setPost({
