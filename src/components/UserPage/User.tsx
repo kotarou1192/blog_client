@@ -19,7 +19,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import { smileReo } from "../../utils/Constants";
 import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
-import { putWithAuthenticate } from "../../utils/network/AxiosWrapper";
+import {
+  deleteWithAuthenticate,
+  putWithAuthenticate
+} from "../../utils/network/AxiosWrapper";
 import { useHistory } from "react-router-dom";
 import SaveIcon from "@mui/icons-material/Save";
 import CloseIcon from "@mui/icons-material/Close";
@@ -173,10 +176,22 @@ const EditWindowButton: React.FC<{
             }
             sx={{
               width: 140,
-              margin: "0 auto",
-              mb: "20px"
+              margin: "0 auto"
             }}
           />
+          <div style={{ textAlign: "right", marginBottom: "20px" }}>
+            <Button
+              size="small"
+              endIcon={<CloseIcon />}
+              onClick={() => {
+                deleteWithAuthenticate("/users/" + name + "/icon").then(() => {
+                  history.go(0);
+                });
+              }}
+            >
+              REMOVE CURRENT ICON?
+            </Button>
+          </div>
           <TextareaAutosize
             autoFocus
             minRows={5}

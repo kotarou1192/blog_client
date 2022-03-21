@@ -26,7 +26,13 @@ import {
   Input,
   FormControl,
   InputLabel,
-  FormHelperText
+  FormHelperText,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  CardMedia
 } from "@mui/material";
 import "../hideScrollbar.css";
 import { useGetAPI } from "../../utils/useAPI";
@@ -38,6 +44,10 @@ import {
   postTagsCountIsValid,
   postTitleIsValid
 } from "./PostValidator";
+import { useDropzone } from "react-dropzone";
+import { postWithAuthenticate } from "../../utils/network/AxiosWrapper";
+import InsertPhotoOutlinedIcon from "@mui/icons-material/InsertPhotoOutlined";
+import CloseIcon from "@mui/icons-material/Close";
 
 type PostEditorProps = {
   post: PostItemParams;
@@ -121,51 +131,240 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
     });
   };
 
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const bodyRef = React.useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const file = acceptedFiles[acceptedFiles.length - 1];
+    const formData = new FormData();
+    if (file == null) return;
+    const pos = bodyRef.current?.selectionStart || props.post.body.length - 1;
+    const left = props.post.body.substring(0, pos);
+    const right = props.post.body.substring(pos);
+    const imgID = new Date().getTime().toString(16);
+    const markdownImageInsertText = `![img${imgID}](!_${imgID}_now_uploading...!)`;
+    props.setPost({
+      ...props.post,
+      body: left + markdownImageInsertText + right
+    });
+    formData.append("image", file);
+    const cleanUp = async (id: string) => {
+      const replacePointText = new RegExp(`!_${id}_now_uploading...!`);
+      await postWithAuthenticate(
+        "/users/" + props.post.user_name + "/images/new",
+        formData
+      )
+        .then((res: any) => {
+          const url = CDN_URL + "/" + res.data.url;
+          const replacedBody = bodyRef.current?.value.replace(
+            replacePointText,
+            url
+          );
+          props.setPost({
+            ...props.post,
+            body: replacedBody
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          const replacedBody = bodyRef.current?.value.replace(
+            replacePointText,
+            "sorry, upload failed."
+          );
+          props.setPost({
+            ...props.post,
+            body: replacedBody
+          });
+        });
+    };
+    cleanUp(imgID);
+  }, [acceptedFiles.length]);
+  const fileRef = React.createRef<HTMLInputElement>();
+  const [open, setOpen] = useState(false);
+  const [uploadImage, setUploadImage] = useState<Blob | undefined>();
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setCopyMessage("copy to clipboard");
+    setOpen(false);
+  };
+
+  const [uploadedURL, setUploadedURL] = useState("");
+  const [copyMessage, setCopyMessage] = useState("copy to clipboard");
+
+  const handleUpload = () => {
+    const form = new FormData();
+    if (uploadImage == null) return;
+    form.append("image", uploadImage);
+    postWithAuthenticate(
+      "/users/" + props.post.user_name + "/images/new",
+      form
+    ).then((res: any) => {
+      const url = CDN_URL + "/" + res.data.url;
+      setUploadImage(undefined);
+      setUploadedURL(url);
+    });
+  };
+
   return (
-    <Container>
-      <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Button variant="outlined" onClick={() => setPreview(!isPreview)}>
-          {isPreview ? "編集に戻る" : "プレビュー"}
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => history.go(-1)}
-          sx={{ ml: "75%" }}
-        >
-          CANCEL
-        </Button>
-        <Button
-          variant="contained"
-          disabled={props.buttonDisabled}
-          onClick={buttonDisableWhenRequest}
-          sx={{ ml: "10px" }}
-        >
-          投稿
-        </Button>
-      </Toolbar>
-      {isPreview ? (
-        <Preview
-          title={props.post.title}
-          body={props.post.body}
-          user_name={props.post.user_name}
-          user_avatar={props.post.user_avatar}
-          categories={categories}
-        />
-      ) : (
-        <Editor
-          currentBaseCategoryName={currentBaseCategoryName}
-          setCurrentBaseCategoryName={setCurrentBaseCategoryName}
-          selectedIDs={selectedIDs}
-          setSelectedIDs={setSelectedIDs}
-          allSubCategories={allSubCategories}
-          allCategories={allCategories}
-          post={props.post}
-          setPost={props.setPost}
-          disabled={props.buttonDisabled}
-          setDisabled={props.setDisabled}
-        />
-      )}
-    </Container>
+    <span>
+      <Dialog open={open} onClose={handleClose}>
+        <Box display="flex">
+          <DialogTitle sx={{ mr: "auto" }}>Image Uploader</DialogTitle>
+          <IconButton
+            onClick={handleClose}
+            sx={{ mt: "3px", justifyContent: "flex-end" }}
+          >
+            <CloseIcon fontSize="inherit" />
+          </IconButton>
+        </Box>
+        <div style={{ textAlign: "center" }}>
+          <Button variant="outlined" component="span" size="small">
+            <label htmlFor="img-upload">
+              <input
+                type="file"
+                id="img-upload"
+                accept="image/*"
+                style={{ display: "none" }}
+                ref={fileRef}
+                onChange={() => {
+                  const selectedIcon = fileRef?.current?.files?.item(0) as
+                    | Blob
+                    | undefined;
+                  if (selectedIcon == null) return;
+                  setUploadImage(selectedIcon);
+                }}
+              />
+              <Button
+                startIcon={<InsertPhotoOutlinedIcon />}
+                component="span"
+                size="small"
+              >
+                アップロードする画像を1つ選択してください。
+              </Button>
+            </label>
+          </Button>
+        </div>
+        <DialogContent>
+          <DialogContentText>
+            <span
+              style={{ fontSize: "small", fontStyle: "bold" }}
+              hidden={uploadImage != null}
+            >
+              このボタンからではなく本文に対して画像を
+              {"ドラッグ&ドロップ"}
+              してもアップロードできます。
+            </span>
+          </DialogContentText>
+          <CardMedia
+            component="img"
+            image={
+              uploadImage ? window.URL.createObjectURL(uploadImage) : undefined
+            }
+            sx={{
+              width: 300,
+              margin: "0 auto"
+            }}
+          />
+          <div
+            hidden={uploadedURL === ""}
+            style={{ marginRight: "auto", marginLeft: "auto" }}
+          >
+            <Typography
+              component="p"
+              sx={{ padding: "3px", bgcolor: "#fafafa", color: "#969696" }}
+            >
+              {"![image](" + uploadedURL + ")"}
+            </Typography>
+            <Box display="flex" sx={{ justifyContent: "center" }}>
+              <Button
+                disabled={copyMessage === "success!"}
+                onClick={() => {
+                  navigator.clipboard
+                    .writeText("![image](" + uploadedURL + ")")
+                    .then(() => {
+                      setCopyMessage("success!");
+                      setUploadedURL("");
+                      handleClose();
+                    });
+                }}
+              >
+                {copyMessage}
+              </Button>
+            </Box>
+          </div>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={handleUpload}
+            sx={{ mr: "auto", ml: "auto" }}
+            disabled={uploadImage == null}
+          >
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Container>
+        <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
+          <Button variant="outlined" onClick={() => setPreview(!isPreview)}>
+            {isPreview ? "編集に戻る" : "プレビュー"}
+          </Button>
+
+          <Button
+            variant="contained"
+            onClick={() => history.go(-1)}
+            sx={{ ml: "75%" }}
+          >
+            CANCEL
+          </Button>
+          <Button
+            variant="contained"
+            disabled={props.buttonDisabled}
+            onClick={buttonDisableWhenRequest}
+            sx={{ ml: "10px" }}
+          >
+            投稿
+          </Button>
+        </Toolbar>
+        {isPreview ? (
+          <Preview
+            title={props.post.title}
+            body={props.post.body}
+            user_name={props.post.user_name}
+            user_avatar={props.post.user_avatar}
+            categories={categories}
+          />
+        ) : (
+          <span>
+            <div style={{ textAlign: "center", marginTop: "5px" }}>
+              <Button
+                variant="outlined"
+                onClick={handleClickOpen}
+                startIcon={<InsertPhotoOutlinedIcon />}
+              >
+                upload image
+              </Button>
+            </div>
+            <Editor
+              currentBaseCategoryName={currentBaseCategoryName}
+              setCurrentBaseCategoryName={setCurrentBaseCategoryName}
+              selectedIDs={selectedIDs}
+              setSelectedIDs={setSelectedIDs}
+              allSubCategories={allSubCategories}
+              allCategories={allCategories}
+              post={props.post}
+              setPost={props.setPost}
+              disabled={props.buttonDisabled}
+              setDisabled={props.setDisabled}
+              uploader={{ acceptedFiles, getRootProps, getInputProps }}
+              bodyRef={bodyRef}
+            />
+          </span>
+        )}
+      </Container>
+    </span>
   );
 };
 
@@ -279,6 +478,8 @@ const Editor: React.FC<{
   setPost: any;
   setDisabled: any;
   disabled: boolean;
+  bodyRef: React.Ref<HTMLTextAreaElement>;
+  uploader: { acceptedFiles: File[]; getRootProps: any; getInputProps: any };
 }> = (props) => {
   const {
     allCategories,
@@ -286,7 +487,9 @@ const Editor: React.FC<{
     selectedIDs,
     setSelectedIDs,
     currentBaseCategoryName,
-    setCurrentBaseCategoryName
+    setCurrentBaseCategoryName,
+    bodyRef,
+    uploader
   } = props;
 
   return (
@@ -336,33 +539,37 @@ const Editor: React.FC<{
           });
         }}
       />
-      <TextareaAutosize
-        className="scrollbar__hide"
-        value={props.post.body}
-        onChange={(el) => {
-          props.setDisabled(
-            !(
-              postBodyIsValid(el.target.value) &&
-              postTitleIsValid(props.post.title) &&
-              postTagsCountIsValid(selectedIDs)
-            )
-          );
-          props.setPost({
-            ...props.post,
-            body: el.target.value,
-            sub_category_ids: selectedIDs
-          });
-        }}
-        minRows={38}
-        maxRows={38}
-        style={{
-          resize: "none",
-          display: "block",
-          width: "100%",
-          padding: "20px",
-          overflowY: "scroll"
-        }}
-      ></TextareaAutosize>
+      <div {...uploader.getRootProps({ className: "dropzone" })}>
+        <TextareaAutosize
+          {...uploader.getInputProps()}
+          className="scrollbar__hide"
+          ref={bodyRef}
+          value={props.post.body}
+          onChange={(el) => {
+            props.setDisabled(
+              !(
+                postBodyIsValid(el.target.value) &&
+                postTitleIsValid(props.post.title) &&
+                postTagsCountIsValid(selectedIDs)
+              )
+            );
+            props.setPost({
+              ...props.post,
+              body: el.target.value,
+              sub_category_ids: selectedIDs
+            });
+          }}
+          minRows={38}
+          maxRows={38}
+          style={{
+            resize: "none",
+            display: "block",
+            width: "100%",
+            padding: "20px",
+            overflowY: "scroll"
+          }}
+        ></TextareaAutosize>
+      </div>
     </Container>
   );
 };
