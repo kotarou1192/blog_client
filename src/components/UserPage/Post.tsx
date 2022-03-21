@@ -6,7 +6,7 @@ import { useGetAPI } from "../../utils/useAPI";
 import { NotFound } from "../NotFound";
 import "../hideScrollbar.css";
 import { Link as RLink } from "react-router-dom";
-import { SmallPostItemCard } from "../SmallPostItemCard";
+import { SmallPostItemCard } from "../Search/SmallPostItemCard";
 
 type PostsProps = {
   name: string;

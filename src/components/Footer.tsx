@@ -83,7 +83,7 @@ export const Footer = () => {
                   </RLink>
                 </li>
                 <li style={listStyle}>
-                  <RLink to="/guide/help" style={rLinkStyle}>
+                  <RLink to="/users/admin/posts/154" style={rLinkStyle}>
                     ヘルプ
                   </RLink>
                 </li>

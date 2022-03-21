@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import {
   getWithAuthenticate,
   putWithAuthenticate
-} from "../utils/network/AxiosWrapper";
+} from "../../utils/network/AxiosWrapper";
 import { PostEditor } from "./PostEditor";
 
 type UpdatePostProps = {

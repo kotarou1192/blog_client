@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import { Link } from "react-router-dom";
 import { Avatar, CardContent, Typography } from "@mui/material";
-import { CDN_URL } from "../utils/network/Constants";
+import { CDN_URL } from "../../utils/network/Constants";
 
 type UserProps = {
   name: string;
