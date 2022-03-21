@@ -4,8 +4,8 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { Avatar, CardContent, Chip, Box } from "@mui/material";
-import { CDN_URL } from "../utils/network/Constants";
-import { Category } from "../@types/global";
+import { CDN_URL } from "../../utils/network/Constants";
+import { Category } from "../../@types/global";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 
 type postItemCardProps = {

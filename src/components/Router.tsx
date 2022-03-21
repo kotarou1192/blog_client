@@ -9,7 +9,7 @@ import { Login } from "./LoginContainer/Login";
 import { sitekey } from "../utils/Constants";
 import { UserPage } from "./UserPage/UserPage";
 import { MyPage } from "./MyPage";
-import { SearchContainer } from "./SearchContainer";
+import { SearchContainer } from "./Search/SearchContainer";
 import { PostItem } from "./PostItem";
 import { CreatePost } from "./PostEditor/CreatePost";
 import { UpdatePost } from "./PostEditor/UpdatePost";

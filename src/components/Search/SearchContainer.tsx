@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Box, Button, ButtonGroup, Grid, Toolbar } from "@mui/material";
 import { SearchResults } from "./SearchResults";
-import { SearchProps } from "../@types/global";
-import { useQuery } from "../utils/network";
+import { SearchProps } from "../../@types/global";
+import { useQuery } from "../../utils/network";
 import { useHistory } from "react-router-dom";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";

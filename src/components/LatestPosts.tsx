@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { getWithAuthenticate } from "../utils/network/AxiosWrapper";
-import { PostItemCard } from "./PostItemCard";
+import { PostItemCard } from "./Search/PostItemCard";
 import { Grid } from "@mui/material";
 
 type SearchResultsProps = {
