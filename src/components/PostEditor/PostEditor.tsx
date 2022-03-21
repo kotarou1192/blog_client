@@ -4,13 +4,13 @@ import {
   CodeComponent,
   ReactMarkdownNames
 } from "react-markdown/lib/ast-to-react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
 import "katex/dist/katex.min.css";
-import "./Markdown.css";
+import "../Markdown.css";
 import {
   Toolbar,
   TextField,
@@ -30,11 +30,16 @@ import {
   InputLabel,
   FormHelperText
 } from "@mui/material";
-import "./hideScrollbar.css";
-import { useGetAPI } from "../utils/useAPI";
-import { CDN_URL } from "../utils/network/Constants";
+import "../hideScrollbar.css";
+import { useGetAPI } from "../../utils/useAPI";
+import { CDN_URL } from "../../utils/network/Constants";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
+import {
+  postBodyIsValid,
+  postTagsCountIsValid,
+  postTitleIsValid
+} from "./PostValidator";
 
 type PostEditorProps = {
   post: PostItemParams;
@@ -82,6 +87,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
   const [allSubCategories, setAllSubCategories] = useState<SubCategory[]>([]);
   const [currentBaseCategoryName, setCurrentBaseCategoryName] =
     useState<string>("");
+  const history = useHistory();
 
   // console.log("####");
   // console.log(categories);
@@ -120,18 +126,21 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
   return (
     <Container>
       <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Button
-          variant="outlined"
-          disabled={props.buttonDisabled}
-          onClick={() => setPreview(!isPreview)}
-        >
+        <Button variant="outlined" onClick={() => setPreview(!isPreview)}>
           {isPreview ? "編集に戻る" : "プレビュー"}
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => history.go(-1)}
+          sx={{ ml: "75%" }}
+        >
+          CANCEL
         </Button>
         <Button
           variant="contained"
           disabled={props.buttonDisabled}
           onClick={buttonDisableWhenRequest}
-          sx={{ ml: "80%" }}
+          sx={{ ml: "10px" }}
         >
           投稿
         </Button>
@@ -154,6 +163,8 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
           allCategories={allCategories}
           post={props.post}
           setPost={props.setPost}
+          disabled={props.buttonDisabled}
+          setDisabled={props.setDisabled}
         />
       )}
     </Container>
@@ -175,7 +186,7 @@ const Preview: React.FC<{
 
   title = title === "" ? "NoTitle" : title;
 
-  const avatarSrc = user_avatar !== "" ? CDN_URL + "/" + user_avatar : "";
+  const avatarSrc = user_avatar ? CDN_URL + "/" + user_avatar : "";
   const hideLinkUnderLine = { textDecoration: "none" };
 
   const genAvatar = () => {
@@ -269,6 +280,8 @@ const Editor: React.FC<{
     body: string;
   };
   setPost: any;
+  setDisabled: any;
+  disabled: boolean;
 }> = (props) => {
   const {
     allCategories,
@@ -285,17 +298,24 @@ const Editor: React.FC<{
         <TextField
           id="standard-basic"
           fullWidth
+          error={!postTitleIsValid(props.post.title)}
           label="Title"
           variant="standard"
           value={props.post.title}
-          onChange={(el: any) =>
+          onChange={(el: any) => {
+            props.setDisabled(
+              !(
+                postTitleIsValid(el.target.value) &&
+                postBodyIsValid(props.post.body) &&
+                postTagsCountIsValid(props.selectedIDs)
+              )
+            );
             props.setPost({
               ...props.post,
-              body: props.post.body,
               title: el.target.value,
               sub_category_ids: selectedIDs
-            })
-          }
+            });
+          }}
         />
       </Toolbar>
       <CategoriesSelector
@@ -305,26 +325,37 @@ const Editor: React.FC<{
         allCategories={allCategories}
         currentBaseCategoryName={currentBaseCategoryName}
         setCurrentBaseCategoryName={setCurrentBaseCategoryName}
-        onChange={(ids: number[]) =>
+        onChange={(ids: number[]) => {
+          props.setDisabled(
+            !(
+              postTagsCountIsValid(ids) &&
+              postBodyIsValid(props.post.body) &&
+              postTitleIsValid(props.post.title)
+            )
+          );
           props.setPost({
             ...props.post,
-            title: props.post.title,
-            body: props.post.body,
             sub_category_ids: ids
-          })
-        }
+          });
+        }}
       />
       <TextareaAutosize
         className="scrollbar__hide"
         value={props.post.body}
-        onChange={(el) =>
+        onChange={(el) => {
+          props.setDisabled(
+            !(
+              postBodyIsValid(el.target.value) &&
+              postTitleIsValid(props.post.body) &&
+              postTagsCountIsValid(props.selectedIDs)
+            )
+          );
           props.setPost({
             ...props.post,
-            title: props.post.title,
             body: el.target.value,
             sub_category_ids: selectedIDs
-          })
-        }
+          });
+        }}
         minRows={38}
         maxRows={38}
         style={{

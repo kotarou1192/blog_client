@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { postWithAuthenticate } from "../utils/network/AxiosWrapper";
+import { postWithAuthenticate } from "../../utils/network/AxiosWrapper";
 import { PostEditor } from "./PostEditor";
 
 type CreatePostProps = {
@@ -46,7 +46,7 @@ export const CreatePost: React.FC<CreatePostProps> = (props) => {
     updated_at: 0
   });
   const history = useHistory();
-  const [buttonDisabled, setDisabled] = useState(false);
+  const [buttonDisabled, setDisabled] = useState(true);
 
   const handlePostToAPI = async () => {
     const { title, body, sub_category_ids } = post;

@@ -11,8 +11,8 @@ import { UserPage } from "./UserPage/UserPage";
 import { MyPage } from "./MyPage";
 import { SearchContainer } from "./SearchContainer";
 import { PostItem } from "./PostItem";
-import { CreatePost } from "./CreatePost";
-import { UpdatePost } from "./UpdatePost";
+import { CreatePost } from "./PostEditor/CreatePost";
+import { UpdatePost } from "./PostEditor/UpdatePost";
 import { NotFound } from "./NotFound";
 import { Header } from "./Header";
 import {
