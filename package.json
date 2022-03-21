@@ -25,12 +25,12 @@
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.1",
     "react-syntax-highlighter": "^15.4.5",
-    "rehype-katex": "^6.0.2",
     "remark-gfm": "^3.0.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
     "start": "yarn run webpack-dev-server --mode development --open",
+    "ci": "yarn install --frozen-lockfile",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "build:prod": "yarn run webpack --node-env production --config ./webpack.config.ts",

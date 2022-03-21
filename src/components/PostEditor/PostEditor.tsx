@@ -8,8 +8,6 @@ import { Link, useHistory } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import rehypeKatex from "rehype-katex";
-import "katex/dist/katex.min.css";
 import "../Markdown.css";
 import {
   Toolbar,
@@ -258,7 +256,6 @@ const Preview: React.FC<{
           <ReactMarkdown
             components={{ code: CodeBlock }}
             remarkPlugins={[remarkGfm]}
-            rehypePlugins={[rehypeKatex]}
           >
             {body}
           </ReactMarkdown>
