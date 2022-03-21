@@ -195,18 +195,21 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
   const [copyMessage, setCopyMessage] = useState("copy to clipboard");
 
   const handleUpload = () => {
+    setUploadButtonDisabled(true);
     const form = new FormData();
     if (uploadImage == null) return;
     form.append("image", uploadImage);
-    postWithAuthenticate(
-      "/users/" + props.post.user_name + "/images/new",
-      form
-    ).then((res: any) => {
-      const url = CDN_URL + "/" + res.data.url;
-      setUploadImage(undefined);
-      setUploadedURL(url);
-    });
+    postWithAuthenticate("/users/" + props.post.user_name + "/images/new", form)
+      .then((res: any) => {
+        const url = CDN_URL + "/" + res.data.url;
+        setUploadImage(undefined);
+        setUploadedURL(url);
+        setUploadButtonDisabled(false);
+      })
+      .catch(() => setUploadButtonDisabled(false));
   };
+
+  const [uploadButtonDisabled, setUploadButtonDisabled] = useState(false);
 
   return (
     <span>
@@ -300,7 +303,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
           <Button
             onClick={handleUpload}
             sx={{ mr: "auto", ml: "auto" }}
-            disabled={uploadImage == null}
+            disabled={uploadImage == null || uploadButtonDisabled}
           >
             Upload
           </Button>
