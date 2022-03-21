@@ -4,7 +4,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
 import { CardContent, Chip, Box, Grid } from "@mui/material";
-import { Category } from "../@types/global";
+import { Category } from "../../@types/global";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 

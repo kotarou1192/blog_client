@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useGetAPI } from "../utils/useAPI";
-import { LatestPosts } from "./LatestPosts";
+import { LatestPosts } from "./Search/LatestPosts";
 
 export const Top: React.FC<{}> = () => {
   const [latestPosts, setLatestPosts] = useState();
