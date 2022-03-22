@@ -133,11 +133,13 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const bodyRef = React.useRef<HTMLTextAreaElement>(null);
+  const [previewDisabled, setPreviewDisabled] = useState(false);
 
   useEffect(() => {
     const file = acceptedFiles[acceptedFiles.length - 1];
     const formData = new FormData();
     if (file == null) return;
+    setPreviewDisabled(true);
     const pos = bodyRef.current?.selectionStart || props.post.body.length - 1;
     const left = props.post.body.substring(0, pos);
     const right = props.post.body.substring(pos);
@@ -164,6 +166,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
             ...props.post,
             body: replacedBody
           });
+          setPreviewDisabled(false);
         })
         .catch((err) => {
           console.error(err);
@@ -175,6 +178,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
             ...props.post,
             body: replacedBody
           });
+          setPreviewDisabled(false);
         });
     };
     cleanUp(imgID);
@@ -311,7 +315,11 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
       </Dialog>
       <Container>
         <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Button variant="outlined" onClick={() => setPreview(!isPreview)}>
+          <Button
+            variant="outlined"
+            disabled={previewDisabled}
+            onClick={() => setPreview(!isPreview)}
+          >
             {isPreview ? "編集に戻る" : "プレビュー"}
           </Button>
 
@@ -562,6 +570,7 @@ const Editor: React.FC<{
               sub_category_ids: selectedIDs
             });
           }}
+          onPaste={(ev) => console.log(ev.currentTarget)}
           minRows={38}
           maxRows={38}
           style={{
