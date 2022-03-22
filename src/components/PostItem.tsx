@@ -25,14 +25,18 @@ import {
   Grid,
   Avatar,
   CardHeader,
-  Chip
+  Chip,
+  IconButton,
+  Box
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPen } from "@fortawesome/free-solid-svg-icons";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "./hideScrollbar.css";
-import { CDN_URL } from "../utils/network/Constants";
+import { CDN_URL, SITE_URL } from "../utils/network/Constants";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import { TwitterIcon, TwitterShareButton } from "react-share";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 type PostItemProps = {
   match: {
@@ -74,10 +78,9 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
       date.getMonth() + 1
     }月${date.getDate()}日${date.getHours()}時${date.getMinutes()}分`;
   };
+  const postURL = "/users/" + name + "/posts/" + id;
 
-  const postItem: 404 | undefined | PostItemParams = useGetAPI(
-    "/users/" + name + "/posts/" + id
-  );
+  const postItem: 404 | undefined | PostItemParams = useGetAPI(postURL);
 
   if (postItem == undefined)
     return (
@@ -169,6 +172,11 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
           </Grid>
         </span>
       </Toolbar>
+      <PostHoverButtons
+        url={postURL}
+        title={postItem.title}
+        author={postItem.user_name}
+      />
       <Toolbar>
         <Button disabled startIcon={<LocalOfferIcon />} />
         {genTags()}
@@ -197,6 +205,49 @@ export const PostItem: React.FC<PostItemProps> = (props) => {
         </ReactMarkdown>
       </Container>
     </Container>
+  );
+};
+
+const PostHoverButtons: React.FC<{
+  author: string;
+  title: string;
+  url: string;
+}> = ({ url, title, author }) => {
+  const liked = false;
+  return (
+    <Box
+      display="flex"
+      sx={{
+        flexDirection: "column",
+        position: "absolute",
+        right: "100px",
+        justifyContent: "center"
+      }}
+    >
+      <IconButton>
+        <FontAwesomeIcon
+          icon={faHeart}
+          color={liked ? "#ff2081" : "#ff97ca"}
+          fontSize={30}
+        />
+      </IconButton>
+      <p
+        style={{
+          color: "#ff97ca",
+          margin: "0 auto",
+          marginBottom: "20px"
+        }}
+      >
+        {0}
+      </p>
+      <TwitterShareButton
+        url={SITE_URL + url}
+        title={author + " さんの記事: " + title + "\n"}
+        hashtags={["BLOG_MD"]}
+      >
+        <TwitterIcon size={30} borderRadius={100} />
+      </TwitterShareButton>
+    </Box>
   );
 };
 
