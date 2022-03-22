@@ -133,11 +133,16 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
   const bodyRef = React.useRef<HTMLTextAreaElement>(null);
+  const [previewDisabled, setPreviewDisabled] = useState(false);
+  const [pastedFiles, setPastedFiles] = useState<File[]>([]);
 
   useEffect(() => {
-    const file = acceptedFiles[acceptedFiles.length - 1];
+    const pasted = pastedFiles.length === 0 ? false : pastedFiles[0];
+    const file = pasted || acceptedFiles[acceptedFiles.length - 1];
     const formData = new FormData();
     if (file == null) return;
+    setPreviewDisabled(true);
+    setPastedFiles([]);
     const pos = bodyRef.current?.selectionStart || props.post.body.length - 1;
     const left = props.post.body.substring(0, pos);
     const right = props.post.body.substring(pos);
@@ -164,6 +169,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
             ...props.post,
             body: replacedBody
           });
+          setPreviewDisabled(false);
         })
         .catch((err) => {
           console.error(err);
@@ -175,10 +181,11 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
             ...props.post,
             body: replacedBody
           });
+          setPreviewDisabled(false);
         });
     };
     cleanUp(imgID);
-  }, [acceptedFiles.length]);
+  }, [acceptedFiles.length, pastedFiles.length]);
   const fileRef = React.createRef<HTMLInputElement>();
   const [open, setOpen] = useState(false);
   const [uploadImage, setUploadImage] = useState<Blob | undefined>();
@@ -311,7 +318,11 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
       </Dialog>
       <Container>
         <Toolbar sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Button variant="outlined" onClick={() => setPreview(!isPreview)}>
+          <Button
+            variant="outlined"
+            disabled={previewDisabled}
+            onClick={() => setPreview(!isPreview)}
+          >
             {isPreview ? "編集に戻る" : "プレビュー"}
           </Button>
 
@@ -363,6 +374,7 @@ export const PostEditor: React.FC<PostEditorProps> = (props) => {
               setDisabled={props.setDisabled}
               uploader={{ acceptedFiles, getRootProps, getInputProps }}
               bodyRef={bodyRef}
+              setPastedFiles={setPastedFiles}
             />
           </span>
         )}
@@ -483,6 +495,7 @@ const Editor: React.FC<{
   disabled: boolean;
   bodyRef: React.Ref<HTMLTextAreaElement>;
   uploader: { acceptedFiles: File[]; getRootProps: any; getInputProps: any };
+  setPastedFiles: any;
 }> = (props) => {
   const {
     allCategories,
@@ -492,7 +505,8 @@ const Editor: React.FC<{
     currentBaseCategoryName,
     setCurrentBaseCategoryName,
     bodyRef,
-    uploader
+    uploader,
+    setPastedFiles
   } = props;
 
   return (
@@ -562,6 +576,7 @@ const Editor: React.FC<{
               sub_category_ids: selectedIDs
             });
           }}
+          onPaste={(ev) => setPastedFiles(ev.clipboardData.files)}
           minRows={38}
           maxRows={38}
           style={{
