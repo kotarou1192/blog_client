@@ -11,4 +11,4 @@ yarn-error.log*
 /public/*.txt
 
 # icons
-public/*.png
+!public/*.png
